@@ -3,6 +3,7 @@ package ee.bcs.valiit.tasks;
 public class Lesson2c {
 
     public static void main(String[] args) {
+        System.out.println(getSeqLength(2));
 
     }
 
@@ -27,25 +28,51 @@ public class Lesson2c {
     // kutsuge iga väärtuse korral välja meetodit getSeqLength
     // salvestage maha kõige suurem ja funktsiooni lõpus tagastage see
     public static int sequence3n(int x, int y) {
-        return 0;
+        int maxJada = 1; //ehk et ka 0 puhul on jada pikkus 1
+        int jadaPikkus; //muutuja kuhu   salvestada n hetkel saadud jada pikkus
+        for (int i = x; i <= y; i++) { //tsükkel käivitub muutujate x ja y suuruste vahel
+            jadaPikkus = getSeqLength(i); //salvestan jadaPikkuse alla hetke loopis oleva jada pikkuse
+            if (maxJada < jadaPikkus) { //võrdlen max jada ja viimati salvestatud jada suurust
+                maxJada = jadaPikkus; //kui viimati salvestatud jada on suurem, siis see lähebki maxJada kohale
+            }
+        }
+        return maxJada;
     }
 
     // TODO 2
     // x = 1 ->1
     // x = 2 -> 2
     // kutsuge välja meetodit nextElement nii kaua kuni vastus tuleb 1
-    // tagastage korduste arv + 1
-    public static int getSeqLength(int x){
-        return 0;
+    // tagastage korduste arv + 1 -juhulkuilugemist alustad 0-st
+
+    //saab teha ka for tsükliga
+    // int i =1;
+    //for(i=1;
+    //
+    //
+    //
+
+    public static int getSeqLength(int x) {
+        int count = 1; // count tähendab mitmenda numbriga meil on tegu, st kui x =1, siis jada pikkus  on ka 1
+        while (x > 1) { //x-ga tähistame  jada VÄÄRTUST, vaatame kas parajasti käesolev väärtus, ehk nt 5 on suurem kui 1
+            x = nextElement(x); //siis  läheb tsüklisse ja arvutame järgmise elemendi selles jadas,  5*3+1 on 16
+            count++;  //tsüklit suurendame 1võrra.
+        }
+        return count;
     }
 
     // TODO 1
     // x = 1 -> 4
     // x = 2 -> 1
     // x = 3 -> 10
-    public static int nextElement(int x){
+    public static int nextElement(int x) {
         // TODO tagasta sequence järgmine element
-        return 0;
-    }
 
+        if (x % 2 == 0) { //kui x on paarisarv, siis:
+            return x / 2; //tagasta see arv jagatud kahega
+        } else { //kui on paaritu
+            x = x * 3 + 1; //korruta x kolmega ja lisa üks
+            return x; //ja tagasta saadud arv
+        }
+    }
 }
