@@ -51,7 +51,6 @@ public class Lesson4 {
                     System.out.println("Selline number puudub valikus. Proovi uuesti.");
 
             }
-
         }
     }
 
@@ -135,10 +134,9 @@ public class Lesson4 {
         System.out.println("Palun sisesta summa, mida soovid üle kanda:");
         double transferAmount = scanner.nextDouble();
         scanner.nextLine();
-        if (accountBalanceMap.get(fromAccount)<transferAmount){
+        if (accountBalanceMap.get(fromAccount) < transferAmount) {
             System.out.println("Kontol puudub piisavalt vaba raha. Proovi uuesti");
-        }
-        else {
+        } else {
             //vaatan hetkejääki
             double fromAcccountBalance = accountBalanceMap.get(fromAccount);
             double toAccountBalance = accountBalanceMap.get(toAccount);
@@ -147,7 +145,7 @@ public class Lesson4 {
             double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
             accountBalanceMap.put(fromAccount, balanceFromAccountAfterTransfer);
             accountBalanceMap.put(toAccount, balanceToAccountAfterTransfer);
-            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount+ " kontole nr " + toAccount);
+            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount);
         }
 
     }

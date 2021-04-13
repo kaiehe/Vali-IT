@@ -1,5 +1,6 @@
 package ee.bcs.valiit.controller;
 
+import ee.bcs.valiit.myprojects.Lesson3HardNew;
 import ee.bcs.valiit.tasks.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -172,5 +173,13 @@ public class TestController {
     public String morse(@RequestParam("text") String text) {
         return Lesson3.morseCode(text);
     }
+
+    //http://localhost:8080/numbersguess/93
+    @GetMapping("/numbersguess/{guess}")
+    public String numbersGuess(@PathVariable("guess") int guess) {
+        return Lesson3HardNew.numbersGuess(guess);
+    }
+
+
 }
 

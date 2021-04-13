@@ -12,8 +12,8 @@ public class Lesson3Hard {
 
     public static void main(String[] args) {
 
-        Random random = new Random();
-        int i = random.nextInt(100);
+        final Random random = new Random();
+        final int i = random.nextInt(100);
         System.out.println("Ma mõtlen ühe arvu peale, mis on vahemikus 1 - 100. Arva, mis number see on?");
         //System.out.println(i);
         boolean kasVõitis = false;
