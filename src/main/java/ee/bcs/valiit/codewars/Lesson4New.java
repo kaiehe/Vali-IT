@@ -30,7 +30,9 @@ public class Lesson4New {
 
             switch (valik) {
                 case 1:
-                    //createAccount();
+                    //// TODO 1
+                    //// Add command: "createAccount ${accountNr}"
+                    //// this has to store accountNr with 0 balance
                     System.out.println("Uue konto loomine. Sisesta soovitud konto nr:");
                     String accountNumber = scanner.nextLine();
                     System.out.println("Sisesta algne kontojääk");
@@ -38,12 +40,13 @@ public class Lesson4New {
                     accountBalanceMap.put(accountNumber, balance);
                     System.out.println("Konto number: " + "vabad vahendid: " + balance + "EUR");
                     break;
+
                 case 2:
                     System.out.println("Kontojäägi päring. Palun sisesta oma konto number:");
                     accountNumber = scanner.nextLine();
                     System.out.println("Kontojääk on: " + accountBalanceMap.get(accountNumber));
-                   // getBalance();
                     break;
+
                 case 3:
                     System.out.println("Raha sissemakse. Palun sisesta konto number kuhu soovid raha sisse maksta:");
                     accountNumber = scanner.nextLine();
@@ -58,8 +61,8 @@ public class Lesson4New {
                     } else {
                         System.out.println("Vigane summa. Proovi uuesti.");
                     }
-                    //depostitMoney();
                     break;
+
                 case 4:
                     System.out.println("Raha välja võtmine. Palun sisesta konto number, millelt soovid raha välja võtta:");
                     accountNumber = scanner.nextLine();
@@ -82,25 +85,24 @@ public class Lesson4New {
                     break;
                 case 5:
                     System.out.println("Ülekande tegemine. Palun sisesta konto number, millelt soovid raha üle kanda:");
-                    String fromAccount = scanner.nextLine();
+                    accountNumber = scanner.nextLine();
                     System.out.println("Sisesta konto number kuhu soovid raha kanda:");
                     String toAccount = scanner.nextLine();
                     System.out.println("Palun sisesta summa, mida soovid üle kanda:");
                     double transferAmount = scanner.nextDouble();
                     scanner.nextLine();
-                    if (accountBalanceMap.get(fromAccount)<transferAmount){
+                    if (accountBalanceMap.get(accountNumber) < transferAmount) {
                         System.out.println("Kontol puudub piisavalt vaba raha. Proovi uuesti");
-                    }
-                    else {
+                    } else {
                         //vaatan hetkejääki
-                        double fromAcccountBalance = accountBalanceMap.get(fromAccount);
+                        double fromAcccountBalance = accountBalanceMap.get(accountNumber);
                         double toAccountBalance = accountBalanceMap.get(toAccount);
                         //uuendan kontojääki
                         double balanceFromAccountAfterTransfer = fromAcccountBalance - transferAmount;
                         double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
-                        accountBalanceMap.put(fromAccount, balanceFromAccountAfterTransfer);
+                        accountBalanceMap.put(accountNumber, balanceFromAccountAfterTransfer);
                         accountBalanceMap.put(toAccount, balanceToAccountAfterTransfer);
-                        System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount+ " kontole nr " + toAccount);
+                        System.out.println("Ülekanne teostatud. Kontolt: " + accountNumber + " kanti " + transferAmount + " kontole nr " + toAccount);
                     }
                     //transferMoney();
                     break;
@@ -115,7 +117,7 @@ public class Lesson4New {
         }
     }
 
-    //// TODO 1
+//// TODO 1
 //// Add command: "createAccount ${accountNr}"
 //// this has to store accountNr with 0 balance
 //    public static void createAccount() {
