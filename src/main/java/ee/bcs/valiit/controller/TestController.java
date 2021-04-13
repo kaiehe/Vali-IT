@@ -3,6 +3,7 @@ package ee.bcs.valiit.controller;
 import ee.bcs.valiit.tasks.Lesson1;
 import ee.bcs.valiit.tasks.Lesson2;
 import ee.bcs.valiit.tasks.Lesson2b;
+import ee.bcs.valiit.tasks.Lesson2c;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,10 +115,29 @@ public class TestController {
     public int[] decreasingArray(@RequestParam("n") int n) {
         return Lesson2b.decreasingArray(n);
     }
+
     //http://localhost:8080/yl3/5
     @GetMapping("/yl3/{n}")
-    public int[] yl3array(@PathVariable("n") int n){
+    public int[] yl3array(@PathVariable("n") int n) {
         return Lesson2b.yl3(n);
     }
+
+    //http://localhost:8080/sequence?x=2&y=5
+    @GetMapping("/sequence")
+    public int sequence(@RequestParam("x") int x, @RequestParam("y") int y) {
+        return Lesson2c.sequence3n(x, y);
+    }
+
+    //http://localhost:8080/sequencelength/5
+    @GetMapping("/sequencelength/{x}")
+    public int sequenceLength(@PathVariable("x") int x) {
+        return Lesson2c.getSeqLength(x);
+    }
+    //http://localhost:8080/nextElement?x=5
+    @GetMapping("/nextElement")
+    public int nextElement(@RequestParam("x") int x){
+        return Lesson2c.nextElement(x);
+    }
+
 }
 
