@@ -47,7 +47,6 @@ public class Lesson3 {
                 return false;
             }
         }
-
         return true;
     }
 
