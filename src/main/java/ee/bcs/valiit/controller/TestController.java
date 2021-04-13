@@ -1,9 +1,6 @@
 package ee.bcs.valiit.controller;
 
-import ee.bcs.valiit.tasks.Lesson1;
-import ee.bcs.valiit.tasks.Lesson2;
-import ee.bcs.valiit.tasks.Lesson2b;
-import ee.bcs.valiit.tasks.Lesson2c;
+import ee.bcs.valiit.tasks.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -133,11 +130,47 @@ public class TestController {
     public int sequenceLength(@PathVariable("x") int x) {
         return Lesson2c.getSeqLength(x);
     }
+
     //http://localhost:8080/nextElement?x=5
     @GetMapping("/nextElement")
-    public int nextElement(@RequestParam("x") int x){
+    public int nextElement(@RequestParam("x") int x) {
         return Lesson2c.nextElement(x);
     }
 
+    //http://localhost:8080/factorial/5
+    @GetMapping("/factorial/{x}")
+    public int factorial(@PathVariable("x") int x) {
+        return Lesson3.factorial(x);
+    }
+
+    //http://localhost:8080/reversestring?a=Kaie
+    @GetMapping("/reversestring")
+    public String reverseString(@RequestParam("a") String a) {
+        return Lesson3.reverseString(a);
+    }
+
+    //http://localhost:8080/isprime/9
+    @GetMapping("/isprime/{x}")
+    public boolean isPrime(@PathVariable("x") int x) {
+        return Lesson3.isPrime(x);
+    }
+
+    //http://localhost:8080/sort?a=1,5,7,3
+    @GetMapping("/sort")
+    public int[] sort(@RequestParam("a") int[] a) {
+        return Lesson3.sort(a);
+    }
+
+    //http://localhost:8080/evenfibonacci/10
+    @GetMapping("/evenfibonacci/{x}")
+    public int evenFibonacci(@PathVariable("x") int x) {
+        return Lesson3.evenFibonacci(x);
+    }
+
+    //http://localhost:8080/morse?text=hello
+    @GetMapping("/morse")
+    public String morse(@RequestParam("text") String text) {
+        return Lesson3.morseCode(text);
+    }
 }
 
