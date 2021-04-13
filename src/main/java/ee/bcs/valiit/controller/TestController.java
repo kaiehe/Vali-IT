@@ -2,6 +2,7 @@ package ee.bcs.valiit.controller;
 
 import ee.bcs.valiit.tasks.Lesson1;
 import ee.bcs.valiit.tasks.Lesson2;
+import ee.bcs.valiit.tasks.Lesson2b;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -89,12 +90,34 @@ public class TestController {
     public int max(@RequestParam("x") int[] x) {
         return Lesson2.max(x);
     }
+
     //http://localhost:8080/sumarray/5,6,7
     @GetMapping("sumarray/{x}")
     public int sum(@PathVariable("x") int[] x) {
         return Lesson2.sum(x);
     }
 
+    //http://localhost:8080/samplearray
+    @GetMapping("/samplearray")
+    public int[] sampleArray() {
+        return Lesson2b.sampleArray();
+    }
 
+    //http://localhost:8080/generatearray/7
+    @GetMapping("generatearray/{n}")
+    public int[] array(@PathVariable("n") int n) {
+        return Lesson2b.generateArray(n);
+    }
+
+    //http://localhost:8080/decreasingarray?n=10
+    @GetMapping("/decreasingarray")
+    public int[] decreasingArray(@RequestParam("n") int n) {
+        return Lesson2b.decreasingArray(n);
+    }
+    //http://localhost:8080/yl3/5
+    @GetMapping("/yl3/{n}")
+    public int[] yl3array(@PathVariable("n") int n){
+        return Lesson2b.yl3(n);
+    }
 }
 
