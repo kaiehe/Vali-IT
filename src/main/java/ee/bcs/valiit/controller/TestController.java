@@ -1,11 +1,16 @@
 package ee.bcs.valiit.controller;
 
+import ee.bcs.valiit.myprojects.Employees;
 import ee.bcs.valiit.myprojects.Lesson3HardNew;
+import ee.bcs.valiit.myprojects.Lesson4Controlleriks;
 import ee.bcs.valiit.tasks.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class TestController {
@@ -178,6 +183,31 @@ public class TestController {
     @GetMapping("/numbersguess/{guess}")
     public String numbersGuess(@PathVariable("guess") int guess) {
         return Lesson3HardNew.numbersGuess(guess);
+    }
+
+    @GetMapping("/newaccount")
+    public String createAccount(@RequestParam("accountnumber") String accountNumber) {
+        return Lesson4Controlleriks.createAccount(accountNumber);
+    }
+
+    @GetMapping("accountbalance")
+    public String accountBalance(@RequestParam("accountnumber") String accountNumber, @RequestParam("balance") double balance) {
+        return Lesson4Controlleriks.getBalance(accountNumber, balance);
+    }
+
+    @GetMapping("/test/employees")
+    public List<Employees> employees() {
+        Employees employees1 = new Employees();
+        employees1.setEmployeeName("Kaie Kõrb");
+        employees1.setEmployeeAddress("Tamme 55, Valga");
+        Employees employees2 = new Employees();
+        employees2.setEmployeeName("Mihkel Mutt");
+        employees2.setEmployeeAddress("Kuuse 54, Tallinn");
+        List<Employees> employeesList = new ArrayList<Employees>();
+        employeesList.add(employees1);
+        employeesList.add(employees2);
+        return employeesList;
+
     }
 
 

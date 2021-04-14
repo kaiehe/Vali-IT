@@ -145,7 +145,8 @@ public class Lesson4 {
             double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
             accountBalanceMap.put(fromAccount, balanceFromAccountAfterTransfer);
             accountBalanceMap.put(toAccount, balanceToAccountAfterTransfer);
-            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount);
+            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount + " konto jääk peale ülekannet: " + balanceFromAccountAfterTransfer);
+            System.out.println("Ülekanne teostatud. Kontole: " + toAccount + " kanti " + transferAmount + " uus konto jääk " + balanceToAccountAfterTransfer);
         }
 
     }

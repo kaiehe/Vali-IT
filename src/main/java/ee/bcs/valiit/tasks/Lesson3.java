@@ -101,6 +101,11 @@ public class Lesson3 {
         morse.put("e", ".");
         morse.put("l", ".-..");
 
+        //sama versioon nagu allpool toodud char i:text.toCharArray, lihtsalt teist for tsüklit kasutades
+        //for (int i  =  0; i<text.length();i++){
+         //   char c  = text.charAt(i);
+        //}
+
         String morseks = ""; //teen tühja Stringi, kuhu salvestan vajalikud tähed
         for (char i : text.toCharArray()) { //tekitan eraldi character array, iga indeksi i väärtus tagastatakse iga järgneva korraga järgmisel real. Nt i=s, järgmisena i=0 jne
             morseks += morse.get((i + "")) + " "; //tsükkel käib kogu array läbi ja lisab/salvestab saadud tähed String morseks reale.
