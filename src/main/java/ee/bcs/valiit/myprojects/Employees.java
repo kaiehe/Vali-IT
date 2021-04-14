@@ -3,6 +3,7 @@ package ee.bcs.valiit.myprojects;
 public class Employees {
     String employeeName;
     String employeeAddress;
+    int index;
 
     public String getEmployeeName() {
         return employeeName;

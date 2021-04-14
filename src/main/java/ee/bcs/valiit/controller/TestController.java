@@ -4,10 +4,7 @@ import ee.bcs.valiit.myprojects.Employees;
 import ee.bcs.valiit.myprojects.Lesson3HardNew;
 import ee.bcs.valiit.myprojects.Lesson4Controlleriks;
 import ee.bcs.valiit.tasks.*;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -195,21 +192,59 @@ public class TestController {
         return Lesson4Controlleriks.getBalance(accountNumber, balance);
     }
 
-    @GetMapping("/test/employees")
-    public List<Employees> employees() {
-        Employees employees1 = new Employees();
-        employees1.setEmployeeName("Kaie Kõrb");
-        employees1.setEmployeeAddress("Tamme 55, Valga");
-        Employees employees2 = new Employees();
-        employees2.setEmployeeName("Mihkel Mutt");
-        employees2.setEmployeeAddress("Kuuse 54, Tallinn");
-        List<Employees> employeesList = new ArrayList<Employees>();
-        employeesList.add(employees1);
-        employeesList.add(employees2);
-        return employeesList;
 
+    public List<Employees> employeesList = new ArrayList<>();
+
+    //TO DO - tagasta kõik (GET ALL)  töötajad, kes on listis
+    @GetMapping("/employees")
+    public List<Employees> employeesGet() {
+        return employeesList;
+    }
+
+    //Andmete salvestamiseks listi
+    @PostMapping("/employees")
+    public void employeesPost(@RequestBody Employees employees) {
+        employeesList.add(employees);
+    }
+
+    //to DO - väljasta töötaja, kes on vastaval indeksil
+    @GetMapping("/employees/{id}")
+    public Employees employeesOnePut(@PathVariable("id") int index) {
+        return employeesList.get(index);
+    }
+
+    //To DO ->Sisendiks Path variable (id=indeks)
+    //asenda töötaja, kes on vastaval indeksil
+    @PutMapping("/employees/{id}")
+    public void employeesPut(@PathVariable("id") int index, @RequestBody Employees employees) {
+        employeesList.set(index, employees);
+    }
+
+    @DeleteMapping("/employees/{id}")
+    public void employeesDelete(@PathVariable("id") int index) {
+        employeesList.remove(index);
     }
 
 
+//    @GetMapping("/test/employees")
+//    public List<Employees> employeesGet() {
+//        Employees employees1 = new Employees();
+//        employees1.setEmployeeName("Kaie Kõrb");
+//        employees1.setEmployeeAddress("Tamme 55, Valga");
+//        Employees employees2 = new Employees();
+//        employees2.setEmployeeName("Mihkel Mutt");
+//        employees2.setEmployeeAddress("Kuuse 54, Tallinn");
+//        List<Employees> employeesList = new ArrayList<Employees>();
+//        employeesList.add(employees1);
+//        employeesList.add(employees2);
+//        return employeesList;
+//
+//    }
+
+//    @PostMapping("/test/employees")
+//    public List<Employees> employeesPost(@RequestBody List<Employees> employees) {
+//        System.out.println(employees.get(0).getEmployeeName());
+//        return employees;
+//    }
 }
 
