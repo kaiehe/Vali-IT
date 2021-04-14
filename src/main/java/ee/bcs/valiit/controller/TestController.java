@@ -7,7 +7,9 @@ import ee.bcs.valiit.tasks.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TestController {
@@ -182,15 +184,30 @@ public class TestController {
         return Lesson3HardNew.numbersGuess(guess);
     }
 
-    @GetMapping("/newaccount")
+    private static Map<String, Double> accountBalanceMap = new HashMap<String, Double>();
+
+
+    @GetMapping("/bankmanager1")
     public String createAccount(@RequestParam("accountnumber") String accountNumber) {
         return Lesson4Controlleriks.createAccount(accountNumber);
     }
 
-    @GetMapping("accountbalance")
+    @GetMapping("/bankmanager2")
     public String accountBalance(@RequestParam("accountnumber") String accountNumber, @RequestParam("balance") double balance) {
         return Lesson4Controlleriks.getBalance(accountNumber, balance);
     }
+
+    @GetMapping("/bankmanager3")
+    public String depositMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("deposit") double deposit) {
+        return Lesson4Controlleriks.depositMoney(accountNumber, deposit);
+    }
+
+    @GetMapping("/bankmanager4")
+    public String withdrawMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("widthdrawal") double withdrawamount) {
+        return Lesson4Controlleriks.withdrawMoney(accountNumber, withdrawamount);
+    }
+
+
 
 
     public List<Employees> employeesList = new ArrayList<>();
