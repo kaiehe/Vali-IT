@@ -187,15 +187,15 @@ public class TestController {
     private static Map<String, Double> accountBalanceMap = new HashMap<String, Double>();
 
 
-    @GetMapping("/bankmanager1")
-    public String createAccount(@RequestParam("accountnumber") String accountNumber) {
-        return Lesson4Controlleriks.createAccount(accountNumber);
-    }
+//    @GetMapping("/bankmanager1")
+//    public String createAccount(@RequestParam("accountnumber") String accountNumber) {
+//        return Lesson4Controlleriks.createAccount(accountNumber);
+//    }
 
-    @GetMapping("/bankmanager2")
-    public String accountBalance(@RequestParam("accountnumber") String accountNumber, @RequestParam("balance") double balance) {
-        return Lesson4Controlleriks.getBalance(accountNumber, balance);
-    }
+//    @GetMapping("/bankmanager2")
+//    public String accountBalance(@RequestParam("accountnumber") String accountNumber, @RequestParam("balance") double balance) {
+//        return Lesson4Controlleriks.getBalance(accountNumber, balance);
+//    }
 
     @GetMapping("/bankmanager3")
     public String depositMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("deposit") double deposit) {

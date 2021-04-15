@@ -1,19 +1,27 @@
 package ee.bcs.valiit.myprojects;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@RestController
 public class Lesson4Controlleriks {
+
     private static Map<String, Double> accountBalanceMap = new HashMap<String, Double>();
 
-    public static String createAccount(String accountNumber) {
+    @GetMapping("/newbankaccount")
+    public static String createAccount(@RequestParam String accountNumber) {
         double balance = 0.00;
         accountBalanceMap.put(accountNumber, balance);
         return "Loodud uus  konto numbriga " + accountNumber + " Vabad vahendid: " + balance + "EUR";
     }
 
-    public static String getBalance(String accountNumber, double balance) {
-        accountBalanceMap.get(accountNumber);
+    @GetMapping("/getbalance")
+    public static String getBalance(@RequestParam String accountNumber) {
+        double balance = accountBalanceMap.get(accountNumber);
         return "Kontol number: " + accountNumber + " on " + balance + " EUR";
     }
 
@@ -45,8 +53,6 @@ public class Lesson4Controlleriks {
             }
         }
     }
-
-
 
 
 }
