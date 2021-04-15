@@ -31,9 +31,11 @@ public class Lesson4Controlleriks {
         return "Konto seis on: " + balance;
     }
 
-    @PutMapping("/depositmoney/{account}/{deposit}") //vaata see osa üle, kuhu mitu parameetrit kirjutama peab, et Postmanis tuleks õige tulemus
+    //http://localhost:8080//depositmoney/4444/200 --> OK
+    @PutMapping("/depositmoney/{account}/{deposit}")
+    //vaata see osa üle, kuhu mitu parameetrit kirjutama peab, et Postmanis tuleks õige tulemus
     public String depositMoney(@PathVariable("account") String accountNumber, @PathVariable("deposit") Double deposit) {
-        Double balance  = accountBalanceMap.get(accountNumber);
+        Double balance = accountBalanceMap.get(accountNumber);
         if (deposit > 0) {
             balance = accountBalanceMap.get(accountNumber);
             balance = balance + deposit;
@@ -45,9 +47,10 @@ public class Lesson4Controlleriks {
         }
     }
 
-    public static String withdrawMoney(String accountNumber, double withdrawamount) {
+    //http://localhost:8080/withdraw/4444/200/1234 --> ok!
+    @PutMapping("/withdraw/{accountnumber}/{withdrawamount}")
+    public String withdrawMoney(@PathVariable("accountnumber") String accountNumber, @PathVariable double withdrawamount) {
         accountBalanceMap.get(accountNumber);
-
         if (withdrawamount < 0) {
             return "Sisestatud summa ei saa olla väiksem kui 0. Palun sisesta soovitud summa.";
         } else {
@@ -60,28 +63,54 @@ public class Lesson4Controlleriks {
             }
         }
     }
-//
-//    public static void transferMoney() {
-//        System.out.println("Ülekande tegemine. Palun sisesta konto number, millelt soovid raha üle kanda:");
-//        String fromAccount = scanner.nextLine();
-//        System.out.println("Sisesta konto number kuhu soovid raha kanda:");
-//        String toAccount = scanner.nextLine();
-//        System.out.println("Palun sisesta summa, mida soovid üle kanda:");
-//        double transferAmount = scanner.nextDouble();
-//        scanner.nextLine();
+    //http://localhost:8080/transferMoney/1111/4444/25 --> OK
+    @GetMapping("/transferMoney/{fromAccountNr}/{toAccountNr}/{transfer}")
+    public String transferMoney(@PathVariable("fromAccountNr") String fromAccountNr, @PathVariable("toAccountNr") String toAccountNr, @PathVariable("transfer") double transfer){
+        Double balance = accountBalanceMap.get(fromAccountNr);
+        if (transfer>accountBalanceMap.get(fromAccountNr)){
+            return "Kontol puudub piisavalt vaba raha";
+        } else if (transfer<=accountBalanceMap.get(fromAccountNr)) {
+            //vaatan hetkejääki, st selle konto oma, millelt raha kannan:
+            balance = balance - transfer;
+            //hetkejääk sellel kontol, kuhu raha kantakse
+            double toAccountBalance = accountBalanceMap.get(toAccountNr);
+            //uuendan kontojääki:
+            double balanceFromAccountAfterTransfer = balance - transfer;
+            double balanceToAccountAfterTransfer = toAccountBalance + transfer;
+            accountBalanceMap.put(fromAccountNr, balanceFromAccountAfterTransfer);
+            accountBalanceMap.put(toAccountNr, balanceToAccountAfterTransfer);
+            return "Ülekanne teostatud. Kontolt " + fromAccountNr + " kanti " + transfer + " kontole nr " + toAccountNr +
+                    ". Konto jääk peale ülekannet: " + balanceFromAccountAfterTransfer + ". Konto " + toAccountNr + " kontoseis peale ülekannet " +
+                    balanceToAccountAfterTransfer;
+        } else {
+            return "Vigane sisend";
+        }
+    }
+
+//    @GetMapping("/transferMoney/{fromAccount}/{toAccount}/{transferAmount}")
+//    public String transferMoney(PathVariable("fromAccount") String fromAccount, @PathVariable("toAccount") String toAccount, @PathVariable
+//    double transferAmount){
+//        Double balance = accountBalanceMap.get(fromAccount); //fromAccount kontojääk
+//        // toAccount = accountBalanceMap.get(toAccount);
 //        if (accountBalanceMap.get(fromAccount) < transferAmount) {
-//            System.out.println("Kontol puudub piisavalt vaba raha. Proovi uuesti");
-//        } else {
+//
+//            return "Kontol puudub piisavalt vaba raha.";
+//
+//        } else if (transferAmount <= accountBalanceMap.get(fromAccount)) {
 //            //vaatan hetkejääki
-//            double fromAcccountBalance = accountBalanceMap.get(fromAccount);
+//            balance = balance - transferAmount;
+//            //Double fromAccountBalance = accountBalanceMap.get(fromAccount);
 //            double toAccountBalance = accountBalanceMap.get(toAccount);
 //            //uuendan kontojääki
-//            double balanceFromAccountAfterTransfer = fromAcccountBalance - transferAmount;
-//            double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
+//            Double balanceFromAccountAfterTransfer = balance - transferAmount;
+//            Double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
 //            accountBalanceMap.put(fromAccount, balanceFromAccountAfterTransfer);
 //            accountBalanceMap.put(toAccount, balanceToAccountAfterTransfer);
-//            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount + " konto jääk peale ülekannet: " + balanceFromAccountAfterTransfer);
-//            System.out.println("Ülekanne teostatud. Kontole: " + toAccount + " kanti " + transferAmount + " uus konto jääk " + balanceToAccountAfterTransfer);
+//            return "Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount +
+//                    " konto jääk peale ülekannet: " + balanceFromAccountAfterTransfer +
+//                    "Ülekanne teostatud. Kontole: " + toAccount + " kanti " + transferAmount + " uus konto jääk " + balanceToAccountAfterTransfer;
+//        } else {
+//            return "Vigane sisend";
 //        }
 //
 //    }

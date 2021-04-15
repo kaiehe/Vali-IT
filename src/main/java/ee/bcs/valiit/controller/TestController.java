@@ -2,14 +2,11 @@ package ee.bcs.valiit.controller;
 
 import ee.bcs.valiit.myprojects.Employees;
 import ee.bcs.valiit.myprojects.Lesson3HardNew;
-import ee.bcs.valiit.myprojects.Lesson4Controlleriks;
 import ee.bcs.valiit.tasks.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class TestController {
@@ -184,28 +181,20 @@ public class TestController {
         return Lesson3HardNew.numbersGuess(guess);
     }
 
-    private static Map<String, Double> accountBalanceMap = new HashMap<String, Double>();
-
-
-//    @GetMapping("/bankmanager1")
-//    public String createAccount(@RequestParam("accountnumber") String accountNumber) {
-//        return Lesson4Controlleriks.createAccount(accountNumber);
+//    @GetMapping("/proov/testing/{a}")
+//    public int min2(@RequestParam("a") int a, @PathVariable("a") int b){
+//        return min2(a,b);
+//    }
+//    @GetMapping ("/midagi/{x}/5")
+//    public int harjutus(@PathVariable("x") int x, @RequestParam ("a") int a, @RequestParam("b") int b){
 //    }
 
-//    @GetMapping("/bankmanager2")
-//    public String accountBalance(@RequestParam("accountnumber") String accountNumber, @RequestParam("balance") double balance) {
-//        return Lesson4Controlleriks.getBalance(accountNumber, balance);
-//    }
+//    private static Map<String, Double> accountBalanceMap = new HashMap<String, Double>();
 
-//    @GetMapping("/bankmanager3")
-//    public String depositMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("deposit") double deposit) {
-//        return Lesson4Controlleriks.depositMoney(accountNumber, deposit);
+//    @GetMapping("/bankmanager4")
+//    public String withdrawMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("widthdrawal") double withdrawamount) {
+//        return Lesson4Controlleriks.withdrawMoney(accountNumber, withdrawamount);
 //    }
-
-    @GetMapping("/bankmanager4")
-    public String withdrawMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("widthdrawal") double withdrawamount) {
-        return Lesson4Controlleriks.withdrawMoney(accountNumber, withdrawamount);
-    }
 
 
 
