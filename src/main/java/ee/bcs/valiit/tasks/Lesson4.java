@@ -87,9 +87,9 @@ public class Lesson4 {
         double deposit = scanner.nextDouble();
         scanner.nextLine();
         if (deposit > 0) {
-            double balance = accountBalanceMap.get(accountNumber);
-            balance = balance + deposit;
-            accountBalanceMap.replace(accountNumber, balance);
+            double balance = accountBalanceMap.get(accountNumber); //current balance
+            balance = balance + deposit; //new balance
+            accountBalanceMap.put(accountNumber, balance); //lisa put-iga, mitte replace´iga. Muidu kirjutab üle.
             System.out.println(deposit + " EUR on lisatud kontole number " + accountNumber + ". Uus kontojääk on: " + balance);
         } else {
             System.out.println("Vigane summa. Proovi uuesti.");

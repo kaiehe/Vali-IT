@@ -1,8 +1,6 @@
 package ee.bcs.valiit.myprojects;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,16 +11,20 @@ public class Lesson4Controlleriks {
     private static Map<String, Double> accountBalanceMap = new HashMap<String, Double>();
 
     @GetMapping("/newbankaccount")
-    public static String createAccount(@RequestParam String accountNumber) {
-        double balance = 0.00;
+    public static String createAccount(@RequestParam("accountNr") String accountNumber, @RequestParam("balance") Double balance) {
         accountBalanceMap.put(accountNumber, balance);
         return "Loodud uus  konto numbriga " + accountNumber + " Vabad vahendid: " + balance + "EUR";
     }
 
-    @GetMapping("/getbalance")
-    public static String getBalance(@RequestParam String accountNumber) {
+    @PostMapping("/newaccount")
+    public void createAccount2(@RequestBody CreateAccountRequest request){
+        accountBalanceMap.put(request.getAccountNumber(), request.getBalance());
+    }
+
+    @GetMapping("/getbalance/{accountNumber}")
+    public static String getBalance(@PathVariable("accountNumber") String accountNumber) {
         double balance = accountBalanceMap.get(accountNumber);
-        return "Kontol number: " + accountNumber + " on " + balance + " EUR";
+        return "Kontol seis on: " + accountBalanceMap.get(accountNumber);
     }
 
     public static String depositMoney(String accountNumber, double deposit) {
@@ -53,6 +55,32 @@ public class Lesson4Controlleriks {
             }
         }
     }
+
+    public static void transferMoney() {
+        System.out.println("Ülekande tegemine. Palun sisesta konto number, millelt soovid raha üle kanda:");
+        String fromAccount = scanner.nextLine();
+        System.out.println("Sisesta konto number kuhu soovid raha kanda:");
+        String toAccount = scanner.nextLine();
+        System.out.println("Palun sisesta summa, mida soovid üle kanda:");
+        double transferAmount = scanner.nextDouble();
+        scanner.nextLine();
+        if (accountBalanceMap.get(fromAccount) < transferAmount) {
+            System.out.println("Kontol puudub piisavalt vaba raha. Proovi uuesti");
+        } else {
+            //vaatan hetkejääki
+            double fromAcccountBalance = accountBalanceMap.get(fromAccount);
+            double toAccountBalance = accountBalanceMap.get(toAccount);
+            //uuendan kontojääki
+            double balanceFromAccountAfterTransfer = fromAcccountBalance - transferAmount;
+            double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
+            accountBalanceMap.put(fromAccount, balanceFromAccountAfterTransfer);
+            accountBalanceMap.put(toAccount, balanceToAccountAfterTransfer);
+            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount + " konto jääk peale ülekannet: " + balanceFromAccountAfterTransfer);
+            System.out.println("Ülekanne teostatud. Kontole: " + toAccount + " kanti " + transferAmount + " uus konto jääk " + balanceToAccountAfterTransfer);
+        }
+
+    }
+
 
 
 }
