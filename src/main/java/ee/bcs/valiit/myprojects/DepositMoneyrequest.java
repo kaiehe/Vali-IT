@@ -1,7 +1,8 @@
 package ee.bcs.valiit.myprojects;
 
-public class CreateAccountRequest {
+public class DepositMoneyrequest {
     String accountNumber;
+    Double deposit;
     Double balance;
 
     public String getAccountNumber() {
@@ -12,11 +13,19 @@ public class CreateAccountRequest {
         this.accountNumber = accountNumber;
     }
 
-    public double getBalance() {
+    public Double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(Double deposit) {
+        this.deposit = deposit;
+    }
+
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 }

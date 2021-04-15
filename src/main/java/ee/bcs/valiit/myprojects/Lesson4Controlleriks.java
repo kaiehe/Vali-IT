@@ -16,24 +16,29 @@ public class Lesson4Controlleriks {
         return "Loodud uus  konto numbriga " + accountNumber + " Vabad vahendid: " + balance + "EUR";
     }
 
+    //http://localhost:8080/newaccount ---> OK, töötab
     @PostMapping("/newaccount")
-    public void createAccount2(@RequestBody CreateAccountRequest request){
-        accountBalanceMap.put(request.getAccountNumber(), request.getBalance());
+    //kui on soov saada mitut eraldi muutujat, tuleb teha eraldi klass, kus sees on need muutujad defineeritud
+    public void createAccount2(@RequestBody CreateAccountRequest request) { //requestbodysse ei saa kahte muutujat panna
+        accountBalanceMap.put(request.getAccountNumber(), request.getBalance());//put-is alati kaks elementi - key ja value
     }
 
+    //http://localhost:8080/getbalance/EE0000--->OK, töötab
     @GetMapping("/getbalance/{accountNumber}")
-    public static String getBalance(@PathVariable("accountNumber") String accountNumber) {
-        double balance = accountBalanceMap.get(accountNumber);
-        return "Kontol seis on: " + accountBalanceMap.get(accountNumber);
+
+    public String getBalance(@PathVariable("accountNumber") String accountNumber) {
+        Double balance = accountBalanceMap.get(accountNumber);
+        return "Konto seis on: " + balance;
     }
 
-    public static String depositMoney(String accountNumber, double deposit) {
-        accountBalanceMap.get(accountNumber);
+    @PutMapping("/depositmoney/{account}/{deposit}") //vaata see osa üle, kuhu mitu parameetrit kirjutama peab, et Postmanis tuleks õige tulemus
+    public String depositMoney(@PathVariable("account") String accountNumber, @PathVariable("deposit") Double deposit) {
+        Double balance  = accountBalanceMap.get(accountNumber);
         if (deposit > 0) {
-            double balance = accountBalanceMap.get(accountNumber);
+            balance = accountBalanceMap.get(accountNumber);
             balance = balance + deposit;
             accountBalanceMap.put(accountNumber, balance);
-            return deposit + " EUR on lisatud kontole number " + accountNumber;
+            return deposit + " EUR on lisatud kontole number " + accountNumber + " Konto jääk: " + balance;
 
         } else {
             return "Vigane summa. Proovi uuesti.";
@@ -55,32 +60,31 @@ public class Lesson4Controlleriks {
             }
         }
     }
-
-    public static void transferMoney() {
-        System.out.println("Ülekande tegemine. Palun sisesta konto number, millelt soovid raha üle kanda:");
-        String fromAccount = scanner.nextLine();
-        System.out.println("Sisesta konto number kuhu soovid raha kanda:");
-        String toAccount = scanner.nextLine();
-        System.out.println("Palun sisesta summa, mida soovid üle kanda:");
-        double transferAmount = scanner.nextDouble();
-        scanner.nextLine();
-        if (accountBalanceMap.get(fromAccount) < transferAmount) {
-            System.out.println("Kontol puudub piisavalt vaba raha. Proovi uuesti");
-        } else {
-            //vaatan hetkejääki
-            double fromAcccountBalance = accountBalanceMap.get(fromAccount);
-            double toAccountBalance = accountBalanceMap.get(toAccount);
-            //uuendan kontojääki
-            double balanceFromAccountAfterTransfer = fromAcccountBalance - transferAmount;
-            double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
-            accountBalanceMap.put(fromAccount, balanceFromAccountAfterTransfer);
-            accountBalanceMap.put(toAccount, balanceToAccountAfterTransfer);
-            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount + " konto jääk peale ülekannet: " + balanceFromAccountAfterTransfer);
-            System.out.println("Ülekanne teostatud. Kontole: " + toAccount + " kanti " + transferAmount + " uus konto jääk " + balanceToAccountAfterTransfer);
-        }
-
-    }
-
+//
+//    public static void transferMoney() {
+//        System.out.println("Ülekande tegemine. Palun sisesta konto number, millelt soovid raha üle kanda:");
+//        String fromAccount = scanner.nextLine();
+//        System.out.println("Sisesta konto number kuhu soovid raha kanda:");
+//        String toAccount = scanner.nextLine();
+//        System.out.println("Palun sisesta summa, mida soovid üle kanda:");
+//        double transferAmount = scanner.nextDouble();
+//        scanner.nextLine();
+//        if (accountBalanceMap.get(fromAccount) < transferAmount) {
+//            System.out.println("Kontol puudub piisavalt vaba raha. Proovi uuesti");
+//        } else {
+//            //vaatan hetkejääki
+//            double fromAcccountBalance = accountBalanceMap.get(fromAccount);
+//            double toAccountBalance = accountBalanceMap.get(toAccount);
+//            //uuendan kontojääki
+//            double balanceFromAccountAfterTransfer = fromAcccountBalance - transferAmount;
+//            double balanceToAccountAfterTransfer = toAccountBalance + transferAmount;
+//            accountBalanceMap.put(fromAccount, balanceFromAccountAfterTransfer);
+//            accountBalanceMap.put(toAccount, balanceToAccountAfterTransfer);
+//            System.out.println("Ülekanne teostatud. Kontolt: " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount + " konto jääk peale ülekannet: " + balanceFromAccountAfterTransfer);
+//            System.out.println("Ülekanne teostatud. Kontole: " + toAccount + " kanti " + transferAmount + " uus konto jääk " + balanceToAccountAfterTransfer);
+//        }
+//
+//    }
 
 
 }

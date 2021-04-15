@@ -197,10 +197,10 @@ public class TestController {
 //        return Lesson4Controlleriks.getBalance(accountNumber, balance);
 //    }
 
-    @GetMapping("/bankmanager3")
-    public String depositMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("deposit") double deposit) {
-        return Lesson4Controlleriks.depositMoney(accountNumber, deposit);
-    }
+//    @GetMapping("/bankmanager3")
+//    public String depositMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("deposit") double deposit) {
+//        return Lesson4Controlleriks.depositMoney(accountNumber, deposit);
+//    }
 
     @GetMapping("/bankmanager4")
     public String withdrawMoney(@RequestParam("accountnumber") String accountNumber, @RequestParam("widthdrawal") double withdrawamount) {
