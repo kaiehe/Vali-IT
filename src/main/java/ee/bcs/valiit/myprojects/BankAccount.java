@@ -4,7 +4,14 @@ public class BankAccount {
     private String owner;
     private String accountNr;
     private Double balance;
-    private boolean isLocked;
+    private boolean accountStatus;
+
+    public BankAccount(String owner, String accountNr, Double balance, boolean isLocked) {
+        this.owner = owner;
+        this.accountNr = accountNr;
+        this.balance = balance;
+        this.accountStatus = isLocked;
+    }
 
     public String getOwner() {
         return owner;
@@ -30,11 +37,11 @@ public class BankAccount {
         this.balance = balance;
     }
 
-    public boolean isLocked() {
-        return isLocked;
+    public boolean isAccountStatus() {
+        return accountStatus;
     }
 
-    public void setLocked(boolean locked) {
-        isLocked = locked;
+    public void setAccountStatus(boolean accountStatus) {
+        this.accountStatus = accountStatus;
     }
 }
