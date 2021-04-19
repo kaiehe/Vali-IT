@@ -37,7 +37,8 @@ public class NewBankManager {
 
     //http://localhost:8080/bank/deposit/1001/200 -->  OK, töötab!
     //puudu veel blokeeritud staatuse vahekontroll
-    @PutMapping("/bank/deposit/{account}/{deposit}") ///putMapping on õigem kasutada, sest uuendame olemasolevaid andmeid, mitte ei loo uut
+    @PutMapping("/bank/deposit/{account}/{deposit}")
+    ///putMapping on õigem kasutada, sest uuendame olemasolevaid andmeid, mitte ei loo uut
     public String depositMoney(@PathVariable("account") String accountNr, @PathVariable("deposit") Double deposit) {
         if (accountNr == null) {
             return "Selline konto puudub.  Kontrolli andmeid!";
@@ -76,6 +77,33 @@ public class NewBankManager {
         }
     }
 
+    @PutMapping("/bank/transfer/{fromAcc}/{amount}/{toAcc}")
+    public String transferMoney(@PathVariable("fromAcc") String fromAccount, @PathVariable("amount") Double amount, @PathVariable("toAcc") String toAccount) {
+        if (fromAccount == null || toAccount == null) {
+            return "Vigane kontonumber. Kontrolli andmeid!";
+        } else if (amount > 0)  {
+            String sql1 = "SELECT balance FROM account WHERE accountno =:dbAccountNoFrom"; //küsin esialgse balance´i fromAccounti jaoks
+            String sql2 = "SELECT balance FROM account WHERE accountno =:dbAccountNoTo"; //küsin esialgse balance´i toAccounti jaoks
+            Map<String, Object> paraMap = new HashMap<>();
+            paraMap.put("dbAccountNoFrom", fromAccount);
+            paraMap.put("dbAccountNoTo", toAccount);
+            Double dbBalanceFromAccount = jdbcTemplate.queryForObject(sql1, paraMap, Double.class); //küsin andmebaasist esialgse kontojäägi FromAccountile
+            Double dbBalanceToAccount = jdbcTemplate.queryForObject(sql2, paraMap, Double.class); //küsin andmebaasist esialgse kontojäägi ToAccountile
+            dbBalanceFromAccount = dbBalanceFromAccount - amount; //uus kontojääk peale raha ära kandmist
+            dbBalanceToAccount = dbBalanceToAccount + amount; //uus kontojääk peale ülekande laekumist
+            String sql3 = "UPDATE account SET balance =:dbBalanceFromAccount WHERE accountno=:dbAccountNoFrom"; //uuendan kontojääki andmebaasis FromAccountil
+            String sql4 = "UPDATE account SET balance =:dbBalanceToAccount WHERE accountno=:dbAccountNoTo"; //uuendan kontojääki andmebaasis ToAccountil
+            paraMap.put("dbBalanceFromAccount", dbBalanceFromAccount);
+            paraMap.put("dbBalanceToAccount", dbBalanceToAccount);
+            jdbcTemplate.update(sql3, paraMap);
+            jdbcTemplate.update(sql4, paraMap);
+            return "Ülekanne teostatud. Kontolt " + fromAccount + " kanti " + amount + " kontole nr " + toAccount +
+                    ". Konto jääk peale ülekannet: " + dbBalanceFromAccount + ". Konto " + toAccount + " kontoseis peale ülekannet " +
+                    dbBalanceToAccount;
+        } else {
+            return "Ülekande summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!";
+        }
+    }
 
 
 }
