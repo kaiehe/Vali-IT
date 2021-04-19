@@ -35,49 +35,47 @@ public class NewBankManager {
         return "Konto balanss on: " + balance;
     }
 
-    //http://localhost:8080/bank/deposit/1001/200 --> OK!
+    //http://localhost:8080/bank/deposit/1001/200 -->  OK, töötab!
+    //puudu veel blokeeritud staatuse vahekontroll
     @PutMapping("/bank/deposit/{account}/{deposit}") ///putMapping on õigem kasutada, sest uuendame olemasolevaid andmeid, mitte ei loo uut
     public String depositMoney(@PathVariable("account") String accountNr, @PathVariable("deposit") Double deposit) {
-        String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo"; //küsin esialgse balance´i
-        Map<String, Object> paraMap = new HashMap<>();
-        paraMap.put("dbAccountNo", accountNr);
-        paraMap.put("dbAmount", deposit);
-        Double balance = jdbcTemplate.queryForObject(sql, paraMap, Double.class);
         if (accountNr == null) {
             return "Selline konto puudub.  Kontrolli andmeid!";
         } else if (deposit > 0) {
-            String sql2 = "UPDATE account SET balance  =:dbDeposit WHERE accountno=:dbAccountNo";
-            paraMap.put("dbAccountNo", accountNr);
-            paraMap.put("dbDeposit", deposit);
-            balance = jdbcTemplate.queryForObject(sql, paraMap, Double.class);
-            balance = balance + deposit;
-            jdbcTemplate.queryForObject(sql, paraMap, Double.class);
-            return deposit + " EUR on lisatud kontole number " + accountNr + " Konto jääk: " + balance;
+            String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo"; //küsin esialgse balance´i
+            Map<String, Object> paraMap = new HashMap<>();
+            paraMap.put("dbAccountNo", accountNr); //salvestan map-i kontonr-i
+            Double dbBalance = jdbcTemplate.queryForObject(sql, paraMap, Double.class); //päring andmebaasist kontojäägi kohta
+            dbBalance = deposit + dbBalance;
+            String sql2 = "UPDATE account SET balance =:dbBalance WHERE accountno=:dbAccountNo"; //uuendan kontojääki andmebaasis
+            paraMap.put("dbBalance", dbBalance); //salvestan uue balance´i map-i
+            jdbcTemplate.update(sql2, paraMap); //uuendan väärtust andmebaasis
+            return deposit + " EUR on lisatud kontole number " + accountNr + " Konto jääk: " + dbBalance;
         } else {
             return "Sissemakse ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!";
         }
     }
-//    //http://localhost:8080/bank/withdraw/4444/200
-//    @PutMapping("/bank/withdraw/{accountnumber}/{withdrawamount}")
-//    public String withdrawMoney(@PathVariable("accountnumber") String accountNr, @PathVariable("withdraw") double withdrawamount) {
-//        String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo";
-//        Map<String, Object> paraMap = new HashMap<>();
-//        paraMap.put("dbAccountNo", accountNr);
-//
-//
-//        accountBalanceMap.get(accountNumber);
-//        if (withdrawamount < 0) {
-//            return "Sisestatud summa ei saa olla väiksem kui 0. Palun sisesta soovitud summa.";
-//        } else {
-//            if (withdrawamount <= accountBalanceMap.get(accountNumber)) {
-//                double balance = accountBalanceMap.get(accountNumber);
-//                accountBalanceMap.put(accountNumber, balance - withdrawamount);
-//                return "Välja makstud: " + withdrawamount + " EUR. Konto jääk: " + accountBalanceMap.get(accountNumber);
-//            } else {
-//                return "Kontol puudub piisavalt vahendeid. Vabad vahendid: " + accountBalanceMap.get(accountNumber);
-//            }
-//        }
-//    }
+
+    //http://localhost:8080/bank/withdraw/1000/200
+    @PutMapping("/bank/withdraw/{account}/{withdraw}")
+    public String withdrawMoney(@PathVariable("account") String accountNr, @PathVariable("withdraw") Double withdrawamount) {
+        if (accountNr == null) {
+            return "Selline konto puudub.  Kontrolli andmeid!";
+        } else if (withdrawamount > 0) {
+            String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo"; //küsin esialgse balance´i
+            Map<String, Object> paraMap = new HashMap<>(); //teen Map-i
+            paraMap.put("dbAccountNo", accountNr); //salvestan map-i kontonr-i
+            Double dbBalance = jdbcTemplate.queryForObject(sql, paraMap, Double.class); //küsin andmebaasist kontojäägi;
+            dbBalance = dbBalance - withdrawamount; //uus kontojääk peale raha väljavõtmist
+            String sql2 = "UPDATE account SET balance =:dbBalance WHERE accountno=:dbAccountNo"; //uuendan kontojääki andmebaasis
+            paraMap.put("dbBalance", dbBalance);  //salvestan uue kontojäägi map-i
+            jdbcTemplate.update(sql2, paraMap); //uuendan väärtust andmebaasis
+            return "Välja makstud: " + withdrawamount + " EUR. Konto jääk: " + dbBalance + " EUR.";
+        } else {
+            return "Väljamakse ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!";
+        }
+    }
+
 
 
 }
