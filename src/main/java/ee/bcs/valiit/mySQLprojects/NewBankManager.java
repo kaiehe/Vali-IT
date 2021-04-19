@@ -14,6 +14,8 @@ public class NewBankManager {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+
+
     //http://localhost:8080/bank/createnewaccount?accountNr=1006&balance=2000.0
     @PostMapping("/bank/createnewaccount")
     public void createAccount(@RequestParam("accountNr") String accountNr,
@@ -28,23 +30,36 @@ public class NewBankManager {
     //http://localhost:8080/bank/account/1000 --> OK, see töötab
     @GetMapping("/bank/account/{accountNumber}")
     public String getBalance(@PathVariable("accountNumber") String accountNr) {
-        String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo";
+        String isBlocked = "SELECT blocked FROM account WHERE accountno = :dbAccountNo"; //küsin andmebaasist välja konkreetse konto staatust
         Map<String, Object> paraMap = new HashMap<>();
         paraMap.put("dbAccountNo", accountNr);
-        Double balance = jdbcTemplate.queryForObject(sql, paraMap, Double.class); //muutuja klass peab võrdsustuma .classi tagastustüübiga
-        return "Konto balanss on: " + balance;
+        Boolean dbBlocked = jdbcTemplate.queryForObject(isBlocked, paraMap, Boolean.class);
+        if (dbBlocked) {
+            return "Konto on blokeeritud.Tehingute tegemine keelatud.";
+        } else {
+            String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo";
+            //Map<String, Object> paraMap = new HashMap<>(); //enne blokeeringu kontrolli oli paramMapi siin vaja teha
+            paraMap.put("dbAccountNo", accountNr);
+            Double balance = jdbcTemplate.queryForObject(sql, paraMap, Double.class); //muutuja klass peab võrdsustuma .classi tagastustüübiga
+            return "Konto balanss on: " + balance;
+        }
     }
 
     //http://localhost:8080/bank/deposit/1001/200 -->  OK, töötab!
-    //puudu veel blokeeritud staatuse vahekontroll
     @PutMapping("/bank/deposit/{account}/{deposit}")
     ///putMapping on õigem kasutada, sest uuendame olemasolevaid andmeid, mitte ei loo uut
     public String depositMoney(@PathVariable("account") String accountNr, @PathVariable("deposit") Double deposit) {
-        if (accountNr == null) {
-            return "Selline konto puudub.  Kontrolli andmeid!";
+        String isBlocked = "SELECT blocked FROM account WHERE accountno = :dbAccountNo"; //küsin andmebaasist välja konkreetse konto staatust
+        Map<String, Object> paraMap = new HashMap<>();
+        paraMap.put("dbAccountNo", accountNr);
+        Boolean dbBlocked = jdbcTemplate.queryForObject(isBlocked, paraMap, Boolean.class);
+//        if (accountNr == null) {
+//            return "Selline konto puudub.  Kontrolli andmeid!";
+        if (dbBlocked) {
+            return "Konto on blokeeritud.Tehingute tegemine keelatud.";
         } else if (deposit > 0) {
             String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo"; //küsin esialgse balance´i
-            Map<String, Object> paraMap = new HashMap<>();
+            //Map<String, Object> paraMap = new HashMap<>(); //enne blokeeringu vahekontrolli lisamis tegin uue map-i siia
             paraMap.put("dbAccountNo", accountNr); //salvestan map-i kontonr-i
             Double dbBalance = jdbcTemplate.queryForObject(sql, paraMap, Double.class); //päring andmebaasist kontojäägi kohta
             dbBalance = deposit + dbBalance;
@@ -60,11 +75,17 @@ public class NewBankManager {
     //http://localhost:8080/bank/withdraw/1000/200
     @PutMapping("/bank/withdraw/{account}/{withdraw}")
     public String withdrawMoney(@PathVariable("account") String accountNr, @PathVariable("withdraw") Double withdrawamount) {
-        if (accountNr == null) {
-            return "Selline konto puudub.  Kontrolli andmeid!";
+        String isBlocked = "SELECT blocked FROM account WHERE accountno = :dbAccountNo"; //küsin andmebaasist välja konkreetse konto staatust
+        Map<String, Object> paraMap = new HashMap<>();
+        paraMap.put("dbAccountNo", accountNr);
+        Boolean dbBlocked = jdbcTemplate.queryForObject(isBlocked, paraMap, Boolean.class);
+//        if (accountNr == null) {
+//            return "Selline konto puudub.  Kontrolli andmeid!";
+        if (dbBlocked) {
+            return "Konto on blokeeritud.Tehingute tegemine keelatud.";
         } else if (withdrawamount > 0) {
             String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo"; //küsin esialgse balance´i
-            Map<String, Object> paraMap = new HashMap<>(); //teen Map-i
+            //Map<String, Object> paraMap = new HashMap<>(); //teen Map-i
             paraMap.put("dbAccountNo", accountNr); //salvestan map-i kontonr-i
             Double dbBalance = jdbcTemplate.queryForObject(sql, paraMap, Double.class); //küsin andmebaasist kontojäägi;
             dbBalance = dbBalance - withdrawamount; //uus kontojääk peale raha väljavõtmist
@@ -79,12 +100,23 @@ public class NewBankManager {
 
     @PutMapping("/bank/transfer/{fromAcc}/{amount}/{toAcc}")
     public String transferMoney(@PathVariable("fromAcc") String fromAccount, @PathVariable("amount") Double amount, @PathVariable("toAcc") String toAccount) {
-        if (fromAccount == null || toAccount == null) {
-            return "Vigane kontonumber. Kontrolli andmeid!";
-        } else if (amount > 0)  {
+        String isBlocked1 = "SELECT blocked FROM account WHERE accountno = :dbAccountNoFrom"; //küsin andmebaasist välja konkreetse konto staatust
+        String isBlocked2 = "SELECT blocked FROM account WHERE accountno = :dbAccountNoTo"; //küsin andmebaasist välja konkreetse konto staatust
+        Map<String, Object> paraMap = new HashMap<>();
+        paraMap.put("dbAccountNoFrom", fromAccount);
+        paraMap.put("dbAccountNoTo", toAccount);
+        Boolean dbBlockedFrom = jdbcTemplate.queryForObject(isBlocked1, paraMap, Boolean.class);
+        Boolean dbBlockedTo = jdbcTemplate.queryForObject(isBlocked2, paraMap, Boolean.class);
+//        if (fromAccount == null || toAccount == null) { //see ei tööta!
+//            return "Vigane kontonumber. Kontrolli andmeid!";
+        if (dbBlockedFrom) {
+            return "Konto, millelt proovite ülekannet teha, on blokeeritud.Tehingute tegemine keelatud.";
+        } else if (dbBlockedTo) {
+            return "Konto, kuhu proovite raha kanda, on blokeeritud.Tehingute tegemine keelatud.";
+        } else if (amount > 0) {
             String sql1 = "SELECT balance FROM account WHERE accountno =:dbAccountNoFrom"; //küsin esialgse balance´i fromAccounti jaoks
             String sql2 = "SELECT balance FROM account WHERE accountno =:dbAccountNoTo"; //küsin esialgse balance´i toAccounti jaoks
-            Map<String, Object> paraMap = new HashMap<>();
+            //Map<String, Object> paraMap = new HashMap<>();
             paraMap.put("dbAccountNoFrom", fromAccount);
             paraMap.put("dbAccountNoTo", toAccount);
             Double dbBalanceFromAccount = jdbcTemplate.queryForObject(sql1, paraMap, Double.class); //küsin andmebaasist esialgse kontojäägi FromAccountile
