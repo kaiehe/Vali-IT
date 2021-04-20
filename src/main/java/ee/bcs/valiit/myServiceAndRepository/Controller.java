@@ -29,9 +29,14 @@ public class Controller {
     return bankService.updateBalance(accountNr, deposit);
     }
 
-    //http://localhost:8080/bank/withdraw/1000/200
+    //http://localhost:8080/repobank/withdraw/1000/200
     @PutMapping("/repobank/withdraw/{account}/{withdraw}")
     public Double withdrawMoney(@PathVariable("account") String accountNr, @PathVariable("withdraw") Double withdrawamount) {
         return bankService.withdrawMoney(accountNr, withdrawamount);
+    }
+    //http://localhost:8080/repobank/transfer/1001/100/1002
+    @PutMapping("/repobank/transfer/{fromAcc}/{amount}/{toAcc}")
+    public String transferMoney(@PathVariable("fromAcc") String fromAccount, @PathVariable("amount") Double transferAmount, @PathVariable("toAcc") String toAccount) {
+        return bankService.transferMoney(fromAccount, transferAmount, toAccount);
     }
 }

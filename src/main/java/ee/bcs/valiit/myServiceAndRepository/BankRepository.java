@@ -43,10 +43,4 @@ public class BankRepository {
         paraMap.put("dbAccountNo", accountNr);
         jdbcTemplate.update(updateSql, paraMap);
     }
-
-
-
-
-
-
 }

@@ -34,7 +34,7 @@ public class BankService {
         }
     }
 
-    public Double withdrawMoney(String accountNr,Double withdrawamount) {
+    public Double withdrawMoney(String accountNr, Double withdrawamount) {
         Boolean response = bankRepository.accountStatus(accountNr);
         if (response) {
             return -1.0;
@@ -48,4 +48,27 @@ public class BankService {
             return balanceAfterWithdraw;
         }
     }
+
+    public String transferMoney(String fromAccount, Double transferAmount, String toAccount) {
+        Boolean fromStatus = bankRepository.accountStatus(fromAccount);
+        Boolean toStatus = bankRepository.accountStatus(toAccount);
+        if (fromStatus) {
+            return "Konto, millelt proovite ülekannet teha, on blokeeritud.Tehingute tegemine keelatud.";
+        } else if (toStatus) {
+            return "Konto, kuhu proovite raha kanda, on blokeeritud.Tehingute tegemine keelatud.";
+        } else if (bankRepository.getBalance(fromAccount) < transferAmount) {
+            return "Kontol puudub piisavalt vahendeid";
+        } else if (transferAmount > 0) {
+            Double balanceAfterForFrom = bankRepository.getBalance(fromAccount) - transferAmount;
+            Double balanceAfterForTo = bankRepository.getBalance(toAccount) + transferAmount;
+            bankRepository.updateBalance(fromAccount, balanceAfterForFrom);
+            bankRepository.updateBalance(toAccount, balanceAfterForTo);
+            return "Ülekanne teostatud. Kontolt " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount +
+                    ". Konto jääk peale ülekannet: " + balanceAfterForFrom + ". Konto " + toAccount + " kontoseis peale ülekannet " +
+                    balanceAfterForTo;
+        } else {
+            return "Ülekande summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!";
+        }
+    }
+
 }
