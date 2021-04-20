@@ -9,7 +9,7 @@ import java.util.Map;
 
 @RestController
 public class NewBankManager {
-    private static Map<String, NewBankAccount> banker = new HashMap<>();
+    //private static Map<String, NewBankAccount> banker = new HashMap<>();
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
@@ -45,12 +45,12 @@ public class NewBankManager {
     }
 
     //http://localhost:8080/bank/deposit/1001/200 -->  OK, töötab!
-    @PutMapping("/bank/deposit/{account}/{deposit}")
+    @PutMapping("/bank/deposit/{account}/{deposit}") //tegelikult võiks olla updateAccountBalanced, sest see sql uuendab kontojääki
     ///putMapping on õigem kasutada, sest uuendame olemasolevaid andmeid, mitte ei loo uut
     public String depositMoney(@PathVariable("account") String accountNr, @PathVariable("deposit") Double deposit) {
         String isBlocked = "SELECT blocked FROM account WHERE accountno = :dbAccountNo"; //küsin andmebaasist välja konkreetse konto staatust
         Map<String, Object> paraMap = new HashMap<>();
-        paraMap.put("dbAccountNo", accountNr);
+        paraMap.put("dbAccountNo", accountNr); //siin peaks  oleam kaks paramMapi iga sql lause muutuja jaoks
         Boolean dbBlocked = jdbcTemplate.queryForObject(isBlocked, paraMap, Boolean.class);
 //        if (accountNr == null) {
 //            return "Selline konto puudub.  Kontrolli andmeid!";
