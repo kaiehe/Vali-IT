@@ -15,7 +15,6 @@ public class NewBankManager {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
 
-
     //http://localhost:8080/bank/createnewaccount?accountNr=1006&balance=2000.0
     @PostMapping("/bank/createnewaccount")
     public void createAccount(@RequestParam("accountNr") String accountNr,
@@ -83,7 +82,7 @@ public class NewBankManager {
 //            return "Selline konto puudub.  Kontrolli andmeid!";
         if (dbBlocked) {
             return "Konto on blokeeritud.Tehingute tegemine keelatud.";
-        } else if (withdrawamount > 0) {
+        } else if (withdrawamount >= 0) {
             String sql = "SELECT balance FROM account WHERE accountno =:dbAccountNo"; //küsin esialgse balance´i
             //Map<String, Object> paraMap = new HashMap<>(); //teen Map-i
             paraMap.put("dbAccountNo", accountNr); //salvestan map-i kontonr-i
@@ -113,7 +112,7 @@ public class NewBankManager {
             return "Konto, millelt proovite ülekannet teha, on blokeeritud.Tehingute tegemine keelatud.";
         } else if (dbBlockedTo) {
             return "Konto, kuhu proovite raha kanda, on blokeeritud.Tehingute tegemine keelatud.";
-        } else if (amount > 0) {
+        } else if (amount >= 0) {
             String sql1 = "SELECT balance FROM account WHERE accountno =:dbAccountNoFrom"; //küsin esialgse balance´i fromAccounti jaoks
             String sql2 = "SELECT balance FROM account WHERE accountno =:dbAccountNoTo"; //küsin esialgse balance´i toAccounti jaoks
             //Map<String, Object> paraMap = new HashMap<>();
@@ -136,6 +135,23 @@ public class NewBankManager {
             return "Ülekande summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!";
         }
     }
-
+    //  http://localhost:8080/bank/account/1001/lock
+    @PutMapping("/bank/account/{accountNumber}/lock")
+    public String lock(@PathVariable("accountNumber") String accountNr) {
+        Map<String, Object> paramMap = new HashMap<>(); //teen uue Map-i
+        String sql2 = "UPDATE account SET blocked= true WHERE accountno =:dbAccountNo"; //uuendan konto staatust
+        paramMap.put("dbAccountNo", accountNr); //salvestan map-i
+        jdbcTemplate.update(sql2, paramMap); //uuendan andmebaasi
+        return "Konto on blokeeritud";
+    }
+    //http://localhost:8080/bank/account/1001/unlock
+    @PutMapping("/bank/account/{accountNumber}/unlock")
+    public String unlock(@PathVariable("accountNumber") String accountNr){
+        Map<String, Object> paramMap = new HashMap<>(); //teen uue Map-i
+        String sql = "UPDATE account SET blocked= false WHERE accountno =:dbAccountNo"; //uuendan konto staatust
+        paramMap.put("dbAccountNo", accountNr); //salvestan map-i
+        jdbcTemplate.update(sql, paramMap); //uuendan andmebaasi
+        return "Konto blokeering on eemaldatud";
+    }
 
 }
