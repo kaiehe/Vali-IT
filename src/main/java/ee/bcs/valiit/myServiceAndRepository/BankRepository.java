@@ -43,4 +43,18 @@ public class BankRepository {
         paraMap.put("dbAccountNo", accountNr);
         jdbcTemplate.update(updateSql, paraMap);
     }
+
+    public void lock(String accountNr) {
+        Map<String, Object> paramMap = new HashMap<>();
+        String setBlock = "UPDATE account SET blocked= true WHERE accountno =:dbAccountNo";
+        paramMap.put("dbAccountNo", accountNr);
+        jdbcTemplate.update(setBlock, paramMap);
+    }
+
+    public void unlock(String accountNr) {
+        Map<String, Object> paramMap = new HashMap<>();
+        String setUnblok = "UPDATE account SET blocked= false WHERE accountno =:dbAccountNo";
+        paramMap.put("dbAccountNo", accountNr);
+        jdbcTemplate.update(setUnblok, paramMap);
+    }
 }

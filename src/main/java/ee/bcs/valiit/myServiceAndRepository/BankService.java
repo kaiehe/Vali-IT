@@ -71,4 +71,13 @@ public class BankService {
         }
     }
 
+    public String lock(String accountNr) {
+        bankRepository.lock(accountNr);
+        return "Konto on blokeeritud";
+    }
+
+    public String unlock(String accountNr) {
+        bankRepository.unlock(accountNr);
+        return "Konto on lahti tehtud";
+    }
 }

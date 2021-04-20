@@ -45,7 +45,8 @@ public class NewBankManager {
     }
 
     //http://localhost:8080/bank/deposit/1001/200 -->  OK, töötab!
-    @PutMapping("/bank/deposit/{account}/{deposit}") //tegelikult võiks olla updateAccountBalanced, sest see sql uuendab kontojääki
+    @PutMapping("/bank/deposit/{account}/{deposit}")
+    //tegelikult võiks olla updateAccountBalanced, sest see sql uuendab kontojääki
     ///putMapping on õigem kasutada, sest uuendame olemasolevaid andmeid, mitte ei loo uut
     public String depositMoney(@PathVariable("account") String accountNr, @PathVariable("deposit") Double deposit) {
         String isBlocked = "SELECT blocked FROM account WHERE accountno = :dbAccountNo"; //küsin andmebaasist välja konkreetse konto staatust
@@ -135,6 +136,7 @@ public class NewBankManager {
             return "Ülekande summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!";
         }
     }
+
     //  http://localhost:8080/bank/account/1001/lock
     @PutMapping("/bank/account/{accountNumber}/lock")
     public String lock(@PathVariable("accountNumber") String accountNr) {
@@ -144,9 +146,10 @@ public class NewBankManager {
         jdbcTemplate.update(sql2, paramMap); //uuendan andmebaasi
         return "Konto on blokeeritud";
     }
+
     //http://localhost:8080/bank/account/1001/unlock
     @PutMapping("/bank/account/{accountNumber}/unlock")
-    public String unlock(@PathVariable("accountNumber") String accountNr){
+    public String unlock(@PathVariable("accountNumber") String accountNr) {
         Map<String, Object> paramMap = new HashMap<>(); //teen uue Map-i
         String sql = "UPDATE account SET blocked= false WHERE accountno =:dbAccountNo"; //uuendan konto staatust
         paramMap.put("dbAccountNo", accountNr); //salvestan map-i
