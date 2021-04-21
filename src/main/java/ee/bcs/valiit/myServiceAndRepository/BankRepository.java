@@ -69,7 +69,7 @@ public class BankRepository {
         paramMap.put("dbBalance", updatedBalance);
         jdbcTemplate.update(history, paramMap);
     }
-
+    //salvestab transaction historysse kõik raha maha võtmised
     public void transactionHistoryWithdraw(LocalDateTime date, String accountNr, Double withdraw, Double updatedBalance) {
         Map<String, Object> paramMap = new HashMap<>();
         String historyWithdraw = "INSERT INTO transaction_history(date, account_number, withdraw, balance) VALUES(:dbDate, :dbAccount_number, :dbWithdraw, :dbBalance)";

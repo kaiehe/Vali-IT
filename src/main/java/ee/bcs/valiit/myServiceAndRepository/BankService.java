@@ -1,5 +1,7 @@
 package ee.bcs.valiit.myServiceAndRepository;
 
+import ee.bcs.valiit.myExceptions.MyApplicationException;
+import ee.bcs.valiit.solution.exception.SampleApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
@@ -13,7 +15,7 @@ public class BankService {
     public void createAccount(String accountNr, String name, double balance) {
         bankRepository.createAccount(accountNr, name, balance);
         Double updatedBalance = balance;
-        bankRepository.transactionHistory(LocalDateTime.now(),accountNr,balance, updatedBalance);
+        bankRepository.transactionHistory(LocalDateTime.now(), accountNr, balance, updatedBalance);
     }
 
     public Double getBalance(String accountNr) {
@@ -28,7 +30,7 @@ public class BankService {
     public Double updateBalance(String accountNr, Double deposit) {
         Boolean response = bankRepository.accountStatus(accountNr);
         if (response) {
-            return -1.0;
+            throw new MyApplicationException("Konto on blokeeritud, tehingute tegemine keelatud.");
         } else if (deposit > 0) {
             Double newBalance = bankRepository.getBalance(accountNr) + deposit;
             bankRepository.updateBalance(accountNr, newBalance);
@@ -42,7 +44,7 @@ public class BankService {
     public Double withdrawMoney(String accountNr, Double withdrawamount) {
         Boolean response = bankRepository.accountStatus(accountNr);
         if (response) {
-            return -1.0;
+            throw new MyApplicationException("Konto on blokeeritud, tehingute tegemine keelatud.");
         } else if (withdrawamount < 0) {
             return -2.0;
         } else if (bankRepository.getBalance(accountNr) < withdrawamount) {
@@ -50,7 +52,7 @@ public class BankService {
         } else {
             Double balanceAfterWithdraw = bankRepository.getBalance(accountNr) - withdrawamount;
             bankRepository.updateBalance(accountNr, balanceAfterWithdraw);
-            bankRepository.transactionHistoryWithdraw(LocalDateTime.now(),accountNr,withdrawamount,balanceAfterWithdraw);
+            bankRepository.transactionHistoryWithdraw(LocalDateTime.now(), accountNr, withdrawamount, balanceAfterWithdraw);
             return balanceAfterWithdraw;
         }
     }
@@ -59,11 +61,11 @@ public class BankService {
         Boolean fromStatus = bankRepository.accountStatus(fromAccount);
         Boolean toStatus = bankRepository.accountStatus(toAccount);
         if (fromStatus) {
-            return "Konto, millelt proovite ülekannet teha, on blokeeritud.Tehingute tegemine keelatud.";
+            throw new MyApplicationException("Konto on blokeeritud, tehingute tegemine keelatud.");
         } else if (toStatus) {
-            return "Konto, kuhu proovite raha kanda, on blokeeritud.Tehingute tegemine keelatud.";
+            throw new MyApplicationException("Konto, kuhu soovite raha kanda, on blokeeritud.");
         } else if (bankRepository.getBalance(fromAccount) < transferAmount) {
-            return "Kontol puudub piisavalt vahendeid";
+            throw new MyApplicationException("Kontol puudub piisavalt vabu vahendeid");
         } else if (transferAmount > 0) {
             Double balanceAfterForFrom = bankRepository.getBalance(fromAccount) - transferAmount;
             Double balanceAfterForTo = bankRepository.getBalance(toAccount) + transferAmount;
