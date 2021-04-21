@@ -2,6 +2,8 @@ package ee.bcs.valiit.myServiceAndRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+
 @org.springframework.stereotype.Service
 public class BankService {
 
@@ -10,6 +12,8 @@ public class BankService {
 
     public void createAccount(String accountNr, String name, double balance) {
         bankRepository.createAccount(accountNr, name, balance);
+        Double updatedBalance = balance;
+        bankRepository.transactionHistory(LocalDateTime.now(),accountNr,balance, updatedBalance);
     }
 
     public Double getBalance(String accountNr) {
@@ -28,6 +32,7 @@ public class BankService {
         } else if (deposit > 0) {
             Double newBalance = bankRepository.getBalance(accountNr) + deposit;
             bankRepository.updateBalance(accountNr, newBalance);
+            bankRepository.transactionHistory(LocalDateTime.now(), accountNr, deposit, newBalance);
             return newBalance;
         } else {
             return -2.0;
@@ -45,6 +50,7 @@ public class BankService {
         } else {
             Double balanceAfterWithdraw = bankRepository.getBalance(accountNr) - withdrawamount;
             bankRepository.updateBalance(accountNr, balanceAfterWithdraw);
+            bankRepository.transactionHistoryWithdraw(LocalDateTime.now(),accountNr,withdrawamount,balanceAfterWithdraw);
             return balanceAfterWithdraw;
         }
     }
@@ -80,4 +86,6 @@ public class BankService {
         bankRepository.unlock(accountNr);
         return "Konto on lahti tehtud";
     }
+
+
 }

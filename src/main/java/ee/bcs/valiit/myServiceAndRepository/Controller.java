@@ -9,7 +9,7 @@ public class Controller {
     @Autowired
     private BankService bankService;
 
-    //http://localhost:8080/repobank/createnewaccount?accountNr=1009&name=Kati&balance=2000
+    //http://localhost:8080/repobank/createnewaccount?accountNr=1000&name=Kaie&balance=2000
     @PostMapping("/repobank/createnewaccount")
     public void createAccount(@RequestParam("accountNr") String accountNr,
                               @RequestParam("name") String name,
@@ -55,6 +55,11 @@ public class Controller {
     @PutMapping("/repobank/account/{accountNumber}/unlock")
     public String unlock(@PathVariable("accountNumber") String accountNr) {
         return bankService.unlock(accountNr);
+    }
+
+    @GetMapping("repobank/history/{accountNumber}")
+    public String transactionHistory(@PathVariable("accountNumber") String accountNr) {
+        return "";
     }
 
 }
