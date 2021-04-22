@@ -1,5 +1,7 @@
 package ee.bcs.valiit.myServiceAndRepository;
 
+import ee.bcs.valiit.MyHibernate.Account;
+import ee.bcs.valiit.MyHibernate.AccountRepository;
 import ee.bcs.valiit.myExceptions.MyApplicationException;
 import ee.bcs.valiit.solution.exception.SampleApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ public class BankService {
     @Autowired
     private BankRepository bankRepository;
 
+    @Autowired
+    private AccountRepository hibernateAccountRepository;
+
     public void createAccount(String accountNr, String name, double balance) {
         bankRepository.createAccount(accountNr, name, balance);
         Double updatedBalance = balance;
@@ -21,6 +26,7 @@ public class BankService {
     public Double getBalance(String accountNr) {
         Boolean response = bankRepository.accountStatus(accountNr);
         if (!response) {
+            Account accountNumber  = hibernateAccountRepository.getOne(accountNr);
             return bankRepository.getBalance(accountNr);
         } else {
             return -1.0;
