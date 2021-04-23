@@ -25,25 +25,24 @@ public class BankService {
 
     public Double getBalance(String accountNr) {
         Boolean response = bankRepository.accountStatus(accountNr);
-        if (!response) {
-            Account accountNumber  = hibernateAccountRepository.getOne(accountNr);
-            return bankRepository.getBalance(accountNr);
-        } else {
-            return -1.0;
+        if (response) {
+            throw new MyApplicationException("Konto on blokeeritud, tehingute tegemine keelatud.");
         }
+        return hibernateAccountRepository.getOne(accountNr).getBalance(); //viitab Account klassi getterile
+        //return bankRepository.getBalance(accountNr);
     }
 
     public Double updateBalance(String accountNr, Double deposit) {
         Boolean response = bankRepository.accountStatus(accountNr);
         if (response) {
             throw new MyApplicationException("Konto on blokeeritud, tehingute tegemine keelatud.");
-        } else if (deposit > 0) {
+        } else if (deposit < 0) {
+            throw new MyApplicationException("Summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!");
+        } else {
             Double newBalance = bankRepository.getBalance(accountNr) + deposit;
             bankRepository.updateBalance(accountNr, newBalance);
             bankRepository.transactionHistory(LocalDateTime.now(), accountNr, deposit, newBalance);
             return newBalance;
-        } else {
-            return -2.0;
         }
     }
 
@@ -52,9 +51,9 @@ public class BankService {
         if (response) {
             throw new MyApplicationException("Konto on blokeeritud, tehingute tegemine keelatud.");
         } else if (withdrawamount < 0) {
-            return -2.0;
+            throw new MyApplicationException("Summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!");
         } else if (bankRepository.getBalance(accountNr) < withdrawamount) {
-            return -3.0;
+            throw new MyApplicationException("Kontol puudub piisavalt vabu vahendeid");
         } else {
             Double balanceAfterWithdraw = bankRepository.getBalance(accountNr) - withdrawamount;
             bankRepository.updateBalance(accountNr, balanceAfterWithdraw);
@@ -72,7 +71,9 @@ public class BankService {
             throw new MyApplicationException("Konto, kuhu soovite raha kanda, on blokeeritud.");
         } else if (bankRepository.getBalance(fromAccount) < transferAmount) {
             throw new MyApplicationException("Kontol puudub piisavalt vabu vahendeid");
-        } else if (transferAmount > 0) {
+        } else if (transferAmount < 0) {
+            throw new MyApplicationException("Ülekande summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!");
+        } else {
             Double balanceAfterForFrom = bankRepository.getBalance(fromAccount) - transferAmount;
             Double balanceAfterForTo = bankRepository.getBalance(toAccount) + transferAmount;
             bankRepository.updateBalance(fromAccount, balanceAfterForFrom);
@@ -80,8 +81,7 @@ public class BankService {
             return "Ülekanne teostatud. Kontolt " + fromAccount + " kanti " + transferAmount + " kontole nr " + toAccount +
                     ". Konto jääk peale ülekannet: " + balanceAfterForFrom + ". Konto " + toAccount + " kontoseis peale ülekannet " +
                     balanceAfterForTo;
-        } else {
-            return "Ülekande summa ei saa olla väiksem kui 0 EUR. Kontrolli andmeid!";
+
         }
     }
 

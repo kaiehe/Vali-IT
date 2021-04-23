@@ -1,13 +1,11 @@
 package ee.bcs.valiit.MyHibernate;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 
 @Entity
 public class Account {
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Id
     private String accountNumber;
