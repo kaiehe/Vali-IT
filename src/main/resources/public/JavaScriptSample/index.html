@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript tasks</title>
+</head>
+<body>
+<h1>Min</h1>
+a:<input id="minA"> b:<input id="minB">
+<button id="minButton">Min</button>
+<p>    Vastus on: <span id="minAnswer"></span>
+    <script>
+        let minA = document.getElementById("minA");
+        let minB = document.getElementById("minB");
+        let minButton = document.getElementById("minButton");
+        minButton.onclick = function () {
+            let minAnswer = document.getElementById("minAnswer")
+            let a = minA.value;
+            let b = minB.value;
+            if (Number(a) < Number(b)) {
+                minAnswer.innerText = a;
+            } else {
+                minAnswer.innerText = b;
+            }
+        }
+    </script>
+</p>
+<h1>Max</h1>
+a: <input id="maxA"> b: <input id="maxB">
+<button id="maxButton">Max</button>
+<p>
+    Vastus on: <span id="maxAnswer"></span>
+
+    <script>
+        let maxA = document.getElementById("maxA");
+        let maxB = document.getElementById("maxB");
+        let maxButton = document.getElementById("maxButton");
+        maxButton.onclick = function () {
+            let maxAnswer = document.getElementById("maxAnswer");
+            let a = maxA.value;
+            let b = maxB.value;
+            if (Number(a) > Number(b)) {
+                maxAnswer.innerText = a;
+            } else {
+                maxAnswer.innerText = b;
+            }
+        }
+    </script>
+</p>
+<h1>Abs</h1>
+abs: <input id="absA">
+<button id="absButton">Abs</button>
+<p>
+    Vastus on: <span id="absAnswer"></span>
+
+    <script>
+        let absA = document.getElementById("absA");
+        let absButton = document.getElementById("absButton");
+        absButton.onclick = function () {
+            let absAnswer = document.getElementById("absAnswer");
+            let a = absA.value;
+            if (Number(a) >= 0) {
+                absAnswer.innerText = a;
+            } else {
+                absAnswer.innerText = a * (-1);
+            }
+        }
+    </script>
+</p>
+<h1>isEven</h1>
+isEven: <input id="isEvenA">
+<button id="evenButton">isEven</button>
+<p>
+    Vastus on: <span id="evenAnswer"></span>
+
+    <script>
+        let isEvenA = document.getElementById("isEvenA");
+        let evenButton = document.getElementById("evenButton");
+        evenButton.onclick = function () {
+            let evenAnswer = document.getElementById("evenAnswer");
+            let a = isEvenA.value;
+            if (Number(a) % 2 == 0) {
+                evenAnswer.innerText = true;
+            } else {
+                evenAnswer.innerText = false;
+            }
+        }
+    </script>
+</p>
+<h1>Min3</h1>
+a:<input id="min3A"> b:<input id="min3B"> c:<input id="min3C">
+<button id="min3Button">Min3</button>
+<p>    Vastus on: <span id="min3Answer"></span>
+    <script>
+        let min3A = document.getElementById("min3A");
+        let min3B = document.getElementById("min3B");
+        let min3C = document.getElementById("min3C")
+        let min3Button = document.getElementById("min3Button");
+        min3Button.onclick = function () {
+            let min3Answer = document.getElementById("min3Answer")
+            let a = min3A.value;
+            let b = min3B.value;
+            let c = min3C.value;
+            if (Number(a) <= Number(b) && Number(a) <= Number(c)) {
+                min3Answer.innerText = a;
+            } else if (Number(b) <= Number(a) && Number(b) <= Number(c)){
+                min3Answer.innerText = b;
+            } else {
+                min3Answer.innerText = c;
+            }
+        }
+    </script>
+</p>
+<h1>Max3</h1>
+a:<input id="max3A"> b:<input id="max3B"> c:<input id="max3C">
+<button id="max3Button">Max3</button>
+<p>    Vastus on: <span id="max3Answer"></span>
+    <script>
+        let max3A = document.getElementById("max3A");
+        let max3B = document.getElementById("max3B");
+        let max3C = document.getElementById("max3C")
+        let max3Button = document.getElementById("max3Button");
+        max3Button.onclick = function () {
+            let max3Answer = document.getElementById("max3Answer")
+            let a = max3A.value;
+            let b = max3B.value;
+            let c = max3C.value;
+            if (Number(a) >= Number(b) && Number(a) >= Number(c)) {
+                max3Answer.innerText = a;
+            } else if (Number(b) >= Number(a) && Number(b) >= Number(c)){
+                max3Answer.innerText = b;
+            } else {
+                max3Answer.innerText = c;
+            }
+        }
+    </script>
+</p>
+
+</body>
+</html>

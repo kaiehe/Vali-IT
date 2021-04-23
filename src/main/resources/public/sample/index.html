@@ -5,25 +5,28 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>Min</h1>
-    a: <input id="minA"> b: <input id="minB"> <button id="minButton">Min</button>
-    <p>
-        Vastus on: <span id="minAnswer"></span>
-    </p>
+<h1>Min</h1>
+a: <input id="minA"> b: <input id="minB">
+<button id="minButton">Min</button>
+<p>
+    Vastus on: <span id="minAnswer"></span>
+
     <script>
         let minA = document.getElementById("minA");
         let minB = document.getElementById("minB");
         let minButton = document.getElementById("minButton");
-        minButton.onclick = function() {
+        minButton.onclick = function () {
             let minAnswer = document.getElementById("minAnswer");
             let a = minA.value;
             let b = minB.value;
-            if(Number(a) < Number(b)){
+            if (Number(a) < Number(b)) {
                 minAnswer.innerText = a;
             } else {
                 minAnswer.innerText = b;
             }
         }
     </script>
+</p>
+
 </body>
 </html>
