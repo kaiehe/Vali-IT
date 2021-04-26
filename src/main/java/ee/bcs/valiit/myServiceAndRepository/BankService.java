@@ -95,5 +95,10 @@ public class BankService {
         return "Konto on lahti tehtud";
     }
 
+//    public String transactionHistory(String accountNr) {
+//        bankRepository.getHistory(accountNr);
+//        return
+//    }
+
 
 }

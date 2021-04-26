@@ -9,17 +9,19 @@ public class Controller {
     @Autowired
     private BankService bankService;
 
+
     //http://localhost:8080/repobank/createnewaccount?accountNr=1000&name=Kaie&balance=2000
-    @PostMapping("/repobank/createnewaccount")
-    public void createAccount(@RequestParam("accountNr") String accountNr,
-                              @RequestParam("name") String name,
-                              @RequestParam("balance") double balance) {
+    @CrossOrigin
+    @PostMapping("/repobank/createnewaccount/{accountNr}/{name}/{balance}")
+    public void createAccount(@PathVariable("accountNr") String accountNr,
+                              @PathVariable("name") String name,
+                              @PathVariable("balance") double balance) {
         bankService.createAccount(accountNr, name, balance);
     }
 
     //http://localhost:8080/repobank/account/1002
-    @GetMapping("/repobank/account/{accountNumber}")
-    public Double getBalance(@PathVariable("accountNumber") String accountNr) {
+    @GetMapping("/repobank/account/{accountNr}")
+    public Double getBalance(@PathVariable("accountNr") String accountNr) {
         return bankService.getBalance(accountNr);
     }
 
@@ -57,9 +59,9 @@ public class Controller {
         return bankService.unlock(accountNr);
     }
 
-    @GetMapping("repobank/history/{accountNumber}")
-    public String transactionHistory(@PathVariable("accountNumber") String accountNr) {
-        return "";
-    }
+//    @GetMapping("repobank/history/{accountNumber}")
+//    public String transactionHistory(@PathVariable("accountNumber") String accountNr) {
+//        return bankService.transactionHistory(accountNr);
+//    }
 
 }

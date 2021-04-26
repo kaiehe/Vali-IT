@@ -4,94 +4,144 @@
     <meta charset="UTF-8">
     <title>Repopank</title>
     <link rel="stylesheet" type="text/css" href="stylesheet.css">
-
 </head>
 <body>
 <h1>Welcome to Repobank!</h1>
 <h2>Choose the sevice you´d like to use</h2>
-<!--<p class="test">mingi pikk jutt</p>-->
-
-<ul>
-    <li>Open new bank account</li>
-    <li>Check balance</li>
-    <li>Make deposit</li>
-    <li>Withdraw money</li>
-    <li>Transfer money</li>
-</ul>
-<br>
-<table>
+<h3> Create new account</h3>
+<table style="width: 50%">
     <tr>
-        <td>Open new account. Insert new account number:<br><input>
-            <button type="submit">Submit</button>
-        </td>
+        <td><h4>Account number: <input id="accountNr"></h4></td>
+        <td><h4>Name: <input id="name"></h4></td>
+        <td><h4>Balance: <input id="balance"></h4></td>
     </tr>
     <tr>
-        <td>Check your account balance. Insert your account number:<br><input>
-            <button type="submit">Submit</button>
+        <td>
+            <button id="createAccountButton">Create account</button>
         </td>
     </tr>
 </table>
-<br>
-<table>
+<button id="getBalanceButton">Request account balance</button>
+<script>
+    let accountNr = document.getElementById("accountNr");
+    let name = document.getElementById("name");
+    let balance = document.getElementById("balance")
+    let createAccountButton = document.getElementById("createAccountButton");
+    let getBalanceButton = document.getElementById("getBalanceButton");
+    createAccountButton.onclick = function () {
+        let configuration = {
+            method: 'POST'
+        }
+        fetch("http://localhost:8080/repobank/createnewaccount/" + accountNr.value + "/" + name.value + "/" + balance.value, configuration)
+            .then(response => response.text())
+            .then(function (response) {
+                alert(response)
+            })
+    }
+    getBalanceButton.onclick = function () {
+        let configuration2 = {
+            method: 'GET'
+        }
+        fetch("http://localhost:8080/repobank/account/" + accountNr.value, configuration2)
+            .then(response => response.text())
+            .then(function (response) {
+                alert(response)
+            })
+    }
+</script>
+<h3> New deposit</h3>
+<table style="width: 50%">
     <tr>
-        <td>New deposit. Insert account number:<br><input type="number"><br>Insert amount:<br><input type="number">
-            <button type="submit">Submit</button>
-        </td>
-    </tr>
-    <tr>
-        <td>Withdraw money. Insert amount:<br><input type="number">
-            <button type="submit">Submit</button>
-        </td>
+        <td><h4>Account number: <input id="accountNrDeposit"></h4></td>
+        <td><h4>Deposit amount: <input id="deposit"></h4></td>
     </tr>
 </table>
-<!--<script>-->
-<!--    alert('Hello, world!');-->
-<!--</script>-->
-<!--<ol>-->
-<!--    <li>1</li>-->
-<!--    <li>2</li>-->
-<!--    <li>3</li>-->
-<!--</ol>-->
-<!--<dl>-->
-<!--    <dt>1</dt>-->
-<!--    <dd>test</dd>-->
-<!--    <dt>2</dt>-->
-<!--    <dd>test</dd>-->
-<!--    <dt>3</dt>-->
-<!--    <dd>test</dd>-->
-<!--</dl>-->
-<!--<table border="2">-->
-<!--    <tr>-->
-<!--        <th>tulp1</th>-->
-<!--        <th>tulp2</th>-->
-<!--        <th>tulp3</th>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td>tulp1</td>-->
-<!--        <td>tulp2</td>-->
-<!--        <td><a href="https://err.ee">link</a></td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td><input></td>-->
-<!--        <td><input type="password"></td>-->
-<!--        <td><textarea></textarea></td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td><input type="radio" name="t1"></td>-->
-<!--        <td><input type="radio" name="t2"></td>-->
-<!--        <td><input type="radio" name="t3"></td>-->
-<!--    </tr>-->
-<!--    <tr>-->
-<!--        <td><input type="checkbox"></td>-->
-<!--        <td><select>-->
-<!--            <option>valik1</option>-->
-<!--            <option>valik2</option>-->
-<!--            <option>valik3</option>-->
-<!--        </select></td>-->
-<!--        <td><input type="file"></td>-->
-<!--    </tr>-->
-<!--</table>-->
-<!--test-->
-<!--<a href="https://www.google.com">link</a>-->
+<button id="createDepositButton">New deposit</button>
+<script>
+    let accountNrDeposit = document.getElementById("accountNrDeposit");
+    let deposit = document.getElementById("deposit");
+    let createDepositButton = document.getElementById("createDepositButton");
+    createDepositButton.onclick = function () {
+        let configuration3 = {
+            method: 'PUT'
+        }
+        fetch("http://localhost:8080/repobank/deposit/" + accountNrDeposit.value + "/" + deposit.value, configuration3)
+            .then(response => response.text())
+            .then(function (response) {
+                alert(response)
+            })
+    }
+</script>
+<h3> Withdraw money</h3>
+<table style="width: 50%">
+    <tr>
+        <td><h4>Account number: <input id="accountNrWithdraw"></h4></td>
+        <td><h4>Withdrawal amount: <input id="withdraw"></h4></td>
+    </tr>
+</table>
+<button id="createWithdrawalButton">Withdraw money</button>
+<script>
+    let accountNrWithdraw = document.getElementById("accountNrWithdraw");
+    let withdraw = document.getElementById("withdraw");
+    let createWithdrawalButton = document.getElementById("createWithdrawalButton");
+    createWithdrawalButton.onclick = function () {
+        let configuration4 = {
+            method: 'PUT'
+        }
+        fetch("http://localhost:8080/repobank/withdraw/" + accountNrWithdraw.value + "/" + withdraw.value, configuration4)
+            .then(response => response.text())
+            .then(function (response) {
+                alert(response)
+            })
+    }
+</script>
+<h3> Transfer money</h3>
+<table style="width: 50%">
+    <tr>
+        <td><h4>Payer account: <input id="fromAccount"></h4></td>
+        <td><h4>Transfer amount: <input id="transferAmount"></h4></td>
+        <td><h4>Receiver account: <input id="toAccount"></h4></td>
+    </tr>
+</table>
+<button id="createTransferButton">Transfer money</button>
+<script>
+    let fromAccount = document.getElementById("fromAccount");
+    let transferAmount = document.getElementById("transferAmount");
+    let toAccount = document.getElementById("toAccount");
+    let createTransferButton = document.getElementById("createTransferButton");
+    createTransferButton.onclick = function () {
+        let configuration5 = {
+            method: 'PUT'
+        }
+        fetch("http://localhost:8080/repobank/transfer/" + fromAccount.value + "/" + transferAmount.value + "/" + toAccount.value, configuration5)
+            .then(response => response.text())
+            .then(function (response) {
+                alert(response)
+            })
+    }
+</script>
+<h3> Change account status to blocked</h3>
+<table style="width: 50%">
+    <tr>
+        <td><h4>Account number: <input id="accountToBlockNumber"></h4></td>
+        <td><h4>Write lock or unlock: <input id="block"></h4></td>
+    </tr>
+</table>
+<button id="createStatusBlockedButton">Lock/unlock account</button>
+<script>
+    let accountToBlockNumber = document.getElementById("accountToBlockNumber");
+    let block = document.getElementById("block");
+    let createStatusBlockedButton  =  document.getElementById("createStatusBlockedButton");
+    createStatusBlockedButton.onclick =  function () {
+        let configuration6 = {
+            method: 'PUT'
+        }
+        fetch("http://localhost:8080/repobank/account/" + accountToBlockNumber.value + "/" + block.value, configuration6)
+        .then(response => response.text())
+        .then(function (response) {
+            alert(response)
+        })
+    }
+</script>
 </body>
 </html>
