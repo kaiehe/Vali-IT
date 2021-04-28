@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @org.springframework.stereotype.Repository
@@ -84,5 +85,10 @@ public class BankRepository {
         String fullHistory  = "SELECT * FROM transaction_history(date, account_number, deposit, withdraw, balance) VALUES(:dbDate, :dbAccount_number, :dbdeposit, :dbWithdraw, :dbBalance)";
         paramMap.put("dbAccount_number", accountNr);
         jdbcTemplate.queryForObject(fullHistory, paramMap, String.class);
+    }
+
+    public List<AccountList> getAllAccounts()  {
+        String sql = "SELECT * FROM account";
+        return jdbcTemplate.query(sql, new HashMap(), new AccountRowMapper());
     }
 }

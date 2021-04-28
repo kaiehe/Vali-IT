@@ -5,14 +5,21 @@ import ee.bcs.valiit.MyHibernate.AccountRepository;
 import ee.bcs.valiit.myExceptions.MyApplicationException;
 import ee.bcs.valiit.solution.exception.SampleApplicationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import java.beans.PropertyEditorSupport;
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
 
 @org.springframework.stereotype.Service
 public class BankService {
 
     @Autowired
     private BankRepository bankRepository;
+
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
     private AccountRepository hibernateAccountRepository;
@@ -93,6 +100,10 @@ public class BankService {
     public String unlock(String accountNr) {
         bankRepository.unlock(accountNr);
         return "Konto on lahti tehtud";
+    }
+
+    public List<AccountList> getAllAccounts() {
+        return bankRepository.getAllAccounts();
     }
 
 //    public String transactionHistory(String accountNr) {
