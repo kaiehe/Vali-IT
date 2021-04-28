@@ -106,10 +106,9 @@ public class BankService {
         return bankRepository.getAllAccounts();
     }
 
-//    public String transactionHistory(String accountNr) {
-//        bankRepository.getHistory(accountNr);
-//        return
-//    }
+    public List<HistoryList> getHistory() {
+        return bankRepository.getHistory();
+    }
 
 
 }

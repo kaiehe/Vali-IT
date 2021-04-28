@@ -67,15 +67,17 @@ public class Controller {
         return bankService.unlock(accountNr);
     }
 
+    //http://localhost:8080/repobank/allacounts
     @CrossOrigin
-    @GetMapping("/repobank/accounthistory")
+    @GetMapping("/repobank/allaccounts")
     public List<AccountList> getAllAccounts() {
         return bankService.getAllAccounts();
     }
 
-//    @GetMapping("repobank/history/{accountNumber}")
-//    public String transactionHistory(@PathVariable("accountNumber") String accountNr) {
-//        return bankService.transactionHistory(accountNr);
-//    }
+    @CrossOrigin
+    @GetMapping("repobank/gethistory")
+    public List<HistoryList> getHistory() {
+        return bankService.getHistory();
+    }
 
 }
