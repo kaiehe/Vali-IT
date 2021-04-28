@@ -5,7 +5,19 @@
     <input v-model.number="minB">
     <button v-on:click="min()">Min</button>
     {{ minAnswer }}
-
+    <h1>List</h1>
+    {{ accounts }}
+    <table>
+      <tr>
+        <th>Account Number</th>
+        <th>Balance</th>
+      </tr>
+      <tr v-for="account in accounts">
+        <td>{{ account.accountNumber }}</td>
+        <td>{{ account.balance }}</td>
+        <td>{{ account }}</td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -19,17 +31,21 @@ function min() {
   }
 }
 
-
 export default {
   data: function () {
     return {
       'minA': 0,
       'minB': 0,
-      'minAnswer': 0
+      'minAnswer': 0,
+      accounts: []
     }
   },
   methods: {
     'min': min
+  },
+  mounted() {
+    this.$http.get("http://localhost:8080/sample/bank/account")
+        .then(response => this.accounts = response.data);
   }
 }
 </script>
