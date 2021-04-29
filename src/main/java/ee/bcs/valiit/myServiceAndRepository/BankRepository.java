@@ -70,6 +70,7 @@ public class BankRepository {
         paramMap.put("dbBalance", updatedBalance);
         jdbcTemplate.update(history, paramMap);
     }
+
     //salvestab transaction historysse kõik raha maha võtmised
     public void transactionHistoryWithdraw(LocalDateTime date, String accountNr, Double withdraw, Double updatedBalance) {
         Map<String, Object> paramMap = new HashMap<>();
@@ -80,14 +81,8 @@ public class BankRepository {
         paramMap.put("dbBalance", updatedBalance);
         jdbcTemplate.update(historyWithdraw, paramMap);
     }
-//    public void getHistory(String accountNr) {
-//        Map<String, Object> paramMap = new HashMap<>();
-//        String fullHistory  = "SELECT * FROM transaction_history(date, account_number, deposit, withdraw, balance) VALUES(:dbDate, :dbAccount_number, :dbdeposit, :dbWithdraw, :dbBalance)";
-//        paramMap.put("dbAccount_number", accountNr);
-//        jdbcTemplate.queryForObject(fullHistory, paramMap, String.class);
-//    }
 
-    public List<AccountList> getAllAccounts()  {
+    public List<AccountList> getAllAccounts() {
         String sql = "SELECT * FROM account";
         return jdbcTemplate.query(sql, new HashMap(), new AccountRowMapper());
     }
@@ -95,6 +90,13 @@ public class BankRepository {
     public List<HistoryList> getHistory() {
         String sqlHistory = "SELECT * FROM transaction_history";
         return jdbcTemplate.query(sqlHistory, new HashMap(), new HistoryRowMapper());
+    }
+
+    public List<HistoryList> getOneHistory(String accountNumber) {
+        Map<String, Object> paramMap = new HashMap<>();
+        String oneHistory = "SELECT * FROM transaction_history WHERE account_number=:accountNumber";
+        paramMap.put("accountNumber", accountNumber);
+        return jdbcTemplate.query(oneHistory, paramMap, new HistoryRowMapper());
     }
 
 }

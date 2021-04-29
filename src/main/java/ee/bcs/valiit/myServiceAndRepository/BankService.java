@@ -110,5 +110,8 @@ public class BankService {
         return bankRepository.getHistory();
     }
 
+    public List<HistoryList> getOneHistory(String accountNumber) {
+        return bankRepository.getOneHistory(accountNumber);
+    }
 
 }

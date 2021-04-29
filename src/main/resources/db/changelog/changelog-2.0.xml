@@ -22,5 +22,14 @@
             <column name="balance" type="numeric"/>
         </createTable>
     </changeSet>
+    <changeSet id="2021-04-29 add users table" author="Kaie Palmaru">
+        <createTable tableName="users">
+            <column name="username" type="text">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="password" type="text"></column>
+            <column name="client" type="text"></column>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>

@@ -75,9 +75,15 @@ public class Controller {
     }
 
     @CrossOrigin
-    @GetMapping("repobank/gethistory")
+    @GetMapping("/repobank/gethistory")
     public List<HistoryList> getHistory() {
         return bankService.getHistory();
+    }
+
+    @CrossOrigin
+    @GetMapping("/repobank/history/{accountNumber}")
+    public List<HistoryList> oneHistory(@PathVariable("accountNumber") String accountNumber) {
+        return bankService.getOneHistory(accountNumber);
     }
 
 }
