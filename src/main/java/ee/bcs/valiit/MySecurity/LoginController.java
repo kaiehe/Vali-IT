@@ -1,26 +1,36 @@
 package ee.bcs.valiit.MySecurity;
 
+import ee.bcs.valiit.myServiceAndRepository.NewUser;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 
+@RequestMapping("api")
 @RestController
 public class LoginController {
 
-    @PostMapping("/api/public/login")
-    public String bankLogin(@RequestBody LoginRequest loginRequest) {
-        Date today = new Date();
-        Date tokenExpirationDate = new Date(today.getTime()+1000*60*60*24);
-        JwtBuilder jwtBuilder = Jwts.builder()
-                .setExpiration(tokenExpirationDate)
-                .setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, "c2VjcmV0")
-                .claim("username", loginRequest.getUsername());
-        return jwtBuilder.compact();
+    @Autowired
+    private AuthService authService;
+
+
+
+    @PostMapping("/public/login")
+    public String login(@RequestBody LoginRequest loginRequest) {
+        return authService.login(loginRequest);
     }
+
+    @CrossOrigin
+    @PostMapping("public/newuser")
+    public void newUser(@RequestBody NewUser newUser) {
+        authService.newUser(newUser);
+    }
+
+
+
+
 }

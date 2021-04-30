@@ -12,6 +12,8 @@ public class Controller {
     @Autowired
     private BankService bankService;
 
+
+
     //http://localhost:8080/repobank/createnewaccount/1000/Kaie/2000
     @CrossOrigin
     @PostMapping("/repobank/createnewaccount/{accountNr}/{name}/{balance}")
@@ -85,5 +87,8 @@ public class Controller {
     public List<HistoryList> oneHistory(@PathVariable("accountNumber") String accountNumber) {
         return bankService.getOneHistory(accountNumber);
     }
+
+
+
 
 }

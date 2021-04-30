@@ -19,9 +19,6 @@ public class BankService {
     private BankRepository bankRepository;
 
     @Autowired
-    private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Autowired
     private AccountRepository hibernateAccountRepository;
 
     public void createAccount(String accountNr, String name, double balance) {
@@ -113,5 +110,7 @@ public class BankService {
     public List<HistoryList> getOneHistory(String accountNumber) {
         return bankRepository.getOneHistory(accountNumber);
     }
+
+
 
 }
